@@ -56,7 +56,7 @@ function CreatePost({ open, setOpen }) {
     if(res.data.success){
       navicate('/');
       console.log("create post dispatch posts>>".posts)
-        dispatch(setPosts([res.data.post,...posts]));//adding post immidatly wothout refressing
+        dispatch(setPosts([res.data.post,...posts]));
         toast.success(res.data.message);
         setOpen(false);
     }
@@ -105,8 +105,7 @@ function CreatePost({ open, setOpen }) {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="font-semibold text-xs">Username</h1>
-              <span className="text-gray-600 text-xs">Bio here...</span>
+              <h1 className="font-semibold text-xs">{user.username}</h1>
             </div>
           </div>
 

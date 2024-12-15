@@ -19,6 +19,7 @@ function useGetSuggestedUsers() {
             if(res.data.success){
                 dispatch(setSuggestedUsers(res.data.users));
             }
+            
         } catch (error) {
                 console.log(error);
         }
