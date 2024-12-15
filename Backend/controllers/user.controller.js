@@ -93,7 +93,7 @@ export const login = async(req,res)=>{
             user
         });
            
-        }
+    }
 
 
         let user = await User.findOne({email});
@@ -226,7 +226,6 @@ export const getSuggestedUsers = async (req,res)=>{
                 messgaer:"dont have suggestion",
             })
         }
-
 
         return res.status(200).json({
             success:true,

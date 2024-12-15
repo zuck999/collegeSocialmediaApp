@@ -108,7 +108,6 @@ export const likePost = async(req,res)=>{
 
         //  shocketIO -- realtime notifacition
 
-
         return res.status(200).json({message:'post liked',success:true});
 
 
