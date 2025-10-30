@@ -2,7 +2,7 @@ import { Bell,  Home, LogOut, MessageCircle, PlusSquare, Search , UserPen } from
 import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux'
 import { setAuthUser } from '@/redux/authSlice'
@@ -114,7 +114,7 @@ function LeftSideBar() {
 
         <div className='flex flex-col  '>
             <h1 className='font-extrabold my-7 pl-3 text-xl'>
-               campus Network
+               <Link to={`/redux/${user?._id}`}>campus Network</Link>
             </h1>
             <div>
                 {

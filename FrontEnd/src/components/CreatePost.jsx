@@ -101,7 +101,7 @@ function CreatePost({ open, setOpen }) {
         
           <div className="flex gap-3 items-center ">
             <Avatar>
-              <AvatarImage src={user.profilePicture} alt="img" />
+              <AvatarImage src={user?.profilePicture} alt="img" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>

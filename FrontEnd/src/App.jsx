@@ -6,6 +6,7 @@ import Login from './components/login';
 import Profile from './components/Profile';
 import EditProfile from './components/EditProfile';
 import EditUser from './components/EditUser';
+import ReduxTest from './components/reduxTest';
 
 
 const brousingRouter = createBrowserRouter([
@@ -25,6 +26,9 @@ const brousingRouter = createBrowserRouter([
       },{
         path:'/editUser',
         element:<EditUser/>
+      },{
+        path:'/redux/:id',
+        element:<ReduxTest/>
       }
     ]
   },

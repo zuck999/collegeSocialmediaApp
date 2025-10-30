@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+
 
 function SuggestedUsers() {
   const altImg = "https://static.vecteezy.com/system/resources/previews/003/715/527/non_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-vector.jpg";
@@ -46,7 +46,6 @@ function SuggestedUsers() {
               </div>
             </div>
                 <soan className="  text-xs text-sky-700  cursor-pointer hover:text-stone-400 ml-1  px-1 py-0 ">+Add Friend</soan>
-
           </div>
         );
       })
