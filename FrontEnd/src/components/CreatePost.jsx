@@ -105,7 +105,7 @@ function CreatePost({ open, setOpen }) {
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="font-semibold text-xs">{user.username}</h1>
+              <h1 className="font-semibold text-xs">{user?.username}</h1>
             </div>
           </div>
 

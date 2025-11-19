@@ -16,7 +16,6 @@ function AllUsers() {
 
       {
       suggestedUsers.map((user) => {
-        console.log("user>>>>>",user)
         return (
           <div key={user._id} className=" flex items-center justify-between my-4   p-2 border rounded-lg px-20 py-4">
             <div>

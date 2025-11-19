@@ -34,10 +34,8 @@ function RightSideBar() {
               ""
             )
           }
-
-
     </div>
   )
 }
 
-export default RightSideBar
+export default RightSideBar;

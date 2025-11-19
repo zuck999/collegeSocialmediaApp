@@ -66,7 +66,7 @@ function LeftSideBar() {
 
 
     useEffect(() => {
-        if (user.username === "Admin") {
+        if (user?.username === "Admin") {
             setSidebarItems([
                 { icon: <Home />, text: "Home" },
                 { icon: <UserPen />, text: "Edit user" },

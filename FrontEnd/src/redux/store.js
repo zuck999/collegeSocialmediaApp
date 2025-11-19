@@ -12,7 +12,6 @@ import {
 import storage from "redux-persist/lib/storage";
 import  postSlice  from "./postSlice.js";
 
-
 //other from redux presist used bcoz when the page is reloded the data in the store
 // will be deleted ... to solve  this issue we usw redix presist following code in doc... 
 //5.57
