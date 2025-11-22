@@ -1,4 +1,4 @@
-import Sidebar from "@/components/custom/side-bar.tsx";
+import Sidebar from "@/components/custom/layout";
 
 function index() {
   return <Sidebar/>
