@@ -1,10 +1,8 @@
+import Sidebar from "@/layout";
+import { UserRoleUnion } from "@/utils/general";
 
 function index() {
-  return (
-    <div>
-        this is admin index page
-    </div>
-  )
+  return <Sidebar userRole={UserRoleUnion.ADMIN}/>
 }
 
-export default index
+export default index;

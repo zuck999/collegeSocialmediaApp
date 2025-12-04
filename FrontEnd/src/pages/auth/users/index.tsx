@@ -1,7 +1,8 @@
-import Sidebar from "@/components/custom/layout";
+import Sidebar from "@/layout";
+import { UserRoleUnion } from "@/utils/general";
 
 function index() {
-  return <Sidebar/>
+  return <Sidebar userRole={UserRoleUnion.USER}/>
 }
 
 export default index;
