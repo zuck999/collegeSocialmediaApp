@@ -10,11 +10,11 @@ function RouteComponent() {
 	// const isLoggedIn = useIsLoggedIn();
 	// const navigate = useNavigate();
 
-	// if (!isLoggedIn) 
-		// navigate({ //todo
-		// 	to: routes.login.employee,
-		// 	search: { redirect: location.href },
-		// });
+	// if (!isLoggedIn)
+	// navigate({ //todo
+	// 	to: routes.login.employee,
+	// 	search: { redirect: location.href },
+	// });
 
 	return <Outlet />;
 }

@@ -114,7 +114,6 @@ const SideBar = ({
 		return location.pathname === path;
 	};
 
-
 	useEffect(() => {
 		const activeItemIndex = navItems.findIndex(
 			(nav) =>
