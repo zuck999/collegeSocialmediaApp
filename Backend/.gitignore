@@ -1,0 +1,21 @@
+# Custom
+src/routeTree.gen.ts
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# only accept bun lock
+pnpm-lock.yaml
+package-lock.json
+
+# From Tanstack Router Setup
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+count.txt
+.env.local
+task.md
+.nitro
+.tanstack
