@@ -1,9 +1,9 @@
 import { Outlet } from "@tanstack/react-router";
+import type React from "react";
 import { SidebarProvider } from "@/context/sidebar.context";
-import SideBar from "./sidebar.layout";
+import type { UserRoleUnion } from "@/utils/general";
 import Header from "./header.layout";
-import { UserRoleUnion } from "@/utils/general";
-import React from "react";
+import SideBar from "./sidebar.layout";
 
 const LayoutContent: React.FC<{ userRole: UserRoleUnion }> = ({ userRole }) => {
 	return (

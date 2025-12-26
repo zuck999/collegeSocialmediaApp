@@ -10,6 +10,7 @@ export const routes = {
 		add: "/admin/add",
 	},
 	user: {
+		index:"user",
 		home: "/user/home",
 		profile: "/user/profile",
 		message: "/user/message",

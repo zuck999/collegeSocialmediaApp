@@ -1,7 +1,7 @@
-import { Input } from "@/components/ui/input";
 import { Ellipsis, Search } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 const Header: React.FC<React.ComponentProps<"header">> = ({ className }) => {
 	const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -38,7 +38,7 @@ const Header: React.FC<React.ComponentProps<"header">> = ({ className }) => {
 							onChange={(e) => {
 								e.target.value.length > 0 ? setLen(true) : setLen(false);
 							}}
-							placeholder="search"
+							placeholder="Search"
 						/>
 					</div>
 

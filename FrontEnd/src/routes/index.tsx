@@ -1,7 +1,8 @@
-import { routes } from "@/layout/routes";
+// import { routes } from "@/layout/routes";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 // import { UserRoleUnion } from "@/utils/general";
 // import { useAccessTokenData, useIsLoggedIn } from "@/store/authStorev2";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+// import { routes } from "@/layout/routes";
 
 export const Route = createFileRoute("/")({
 	component: RouteComponent,
@@ -10,19 +11,11 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
 	// const isLoggedIn = useIsLoggedIn();
 	// const accessTokenData = useAccessTokenData();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
-	if (true) {
-		switch ("USER") {
-			case "USER":
-				navigate({ to: routes.user.home });
-				break;
-
-			// case "ADMIN"://todo
-			// 	navigate({ to: routes.admin.add });
-			// 	break;
-		}
-	} else {
-		navigate({ to: routes.login });
-	}
+	// TODO: Replace with real authentication/role detection logic.
+	// For now, redirect logged-in users to the user home page.
+	// navigate({ to: routes.user.home });
+	// navigate({ to: routes.user.home })
+	return <Outlet/>
 }
