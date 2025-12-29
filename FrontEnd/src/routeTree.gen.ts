@@ -11,12 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UnauthRegisterRouteImport } from './routes/_unauth/register'
+import { Route as UnauthSignupRouteImport } from './routes/_unauth/signup'
 import { Route as UnauthLoginRouteImport } from './routes/_unauth/login'
 import { Route as AuthUserRouteImport } from './routes/_auth/user'
 import { Route as AuthAdminRouteImport } from './routes/_auth/admin'
 import { Route as AuthUserIndexRouteImport } from './routes/_auth/user/index'
 import { Route as AuthAdminIndexRouteImport } from './routes/_auth/admin/index'
+import { Route as AuthUserHomeRouteImport } from './routes/_auth/user/home'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -27,9 +28,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UnauthRegisterRoute = UnauthRegisterRouteImport.update({
-  id: '/_unauth/register',
-  path: '/register',
+const UnauthSignupRoute = UnauthSignupRouteImport.update({
+  id: '/_unauth/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UnauthLoginRoute = UnauthLoginRouteImport.update({
@@ -57,20 +58,27 @@ const AuthAdminIndexRoute = AuthAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthAdminRoute,
 } as any)
+const AuthUserHomeRoute = AuthUserHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AuthUserRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AuthAdminRouteWithChildren
   '/user': typeof AuthUserRouteWithChildren
   '/login': typeof UnauthLoginRoute
-  '/register': typeof UnauthRegisterRoute
+  '/signup': typeof UnauthSignupRoute
+  '/user/home': typeof AuthUserHomeRoute
   '/admin/': typeof AuthAdminIndexRoute
   '/user/': typeof AuthUserIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof UnauthLoginRoute
-  '/register': typeof UnauthRegisterRoute
+  '/signup': typeof UnauthSignupRoute
+  '/user/home': typeof AuthUserHomeRoute
   '/admin': typeof AuthAdminIndexRoute
   '/user': typeof AuthUserIndexRoute
 }
@@ -81,7 +89,8 @@ export interface FileRoutesById {
   '/_auth/admin': typeof AuthAdminRouteWithChildren
   '/_auth/user': typeof AuthUserRouteWithChildren
   '/_unauth/login': typeof UnauthLoginRoute
-  '/_unauth/register': typeof UnauthRegisterRoute
+  '/_unauth/signup': typeof UnauthSignupRoute
+  '/_auth/user/home': typeof AuthUserHomeRoute
   '/_auth/admin/': typeof AuthAdminIndexRoute
   '/_auth/user/': typeof AuthUserIndexRoute
 }
@@ -92,11 +101,12 @@ export interface FileRouteTypes {
     | '/admin'
     | '/user'
     | '/login'
-    | '/register'
+    | '/signup'
+    | '/user/home'
     | '/admin/'
     | '/user/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/admin' | '/user'
+  to: '/' | '/login' | '/signup' | '/user/home' | '/admin' | '/user'
   id:
     | '__root__'
     | '/'
@@ -104,7 +114,8 @@ export interface FileRouteTypes {
     | '/_auth/admin'
     | '/_auth/user'
     | '/_unauth/login'
-    | '/_unauth/register'
+    | '/_unauth/signup'
+    | '/_auth/user/home'
     | '/_auth/admin/'
     | '/_auth/user/'
   fileRoutesById: FileRoutesById
@@ -113,7 +124,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   UnauthLoginRoute: typeof UnauthLoginRoute
-  UnauthRegisterRoute: typeof UnauthRegisterRoute
+  UnauthSignupRoute: typeof UnauthSignupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -132,11 +143,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_unauth/register': {
-      id: '/_unauth/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof UnauthRegisterRouteImport
+    '/_unauth/signup': {
+      id: '/_unauth/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof UnauthSignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_unauth/login': {
@@ -174,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAdminIndexRouteImport
       parentRoute: typeof AuthAdminRoute
     }
+    '/_auth/user/home': {
+      id: '/_auth/user/home'
+      path: '/home'
+      fullPath: '/user/home'
+      preLoaderRoute: typeof AuthUserHomeRouteImport
+      parentRoute: typeof AuthUserRoute
+    }
   }
 }
 
@@ -190,10 +208,12 @@ const AuthAdminRouteWithChildren = AuthAdminRoute._addFileChildren(
 )
 
 interface AuthUserRouteChildren {
+  AuthUserHomeRoute: typeof AuthUserHomeRoute
   AuthUserIndexRoute: typeof AuthUserIndexRoute
 }
 
 const AuthUserRouteChildren: AuthUserRouteChildren = {
+  AuthUserHomeRoute: AuthUserHomeRoute,
   AuthUserIndexRoute: AuthUserIndexRoute,
 }
 
@@ -217,7 +237,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   UnauthLoginRoute: UnauthLoginRoute,
-  UnauthRegisterRoute: UnauthRegisterRoute,
+  UnauthSignupRoute: UnauthSignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

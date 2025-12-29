@@ -26,22 +26,17 @@ type NavigationLink =
 export type NavItem = NavigationLink;
 
 export const userNavItems: NavItem[] = [
-	{
-		icon: BookDashed,
-		name: "Dashboard",
-		subItems: [
-			{
-				name: "Profile",
-				path: routes.user.profile,
-				icon: User,
-			},
-		],
-	},
-	{
-		name: "index",
-		path: routes.user.index,
-		icon: Home,
-	},
+	// {
+	// 	icon: BookDashed,
+	// 	name: "Dashboard",
+	// 	subItems: [
+	// 		{
+	// 			name: "Profile",
+	// 			path: routes.user.profile,
+	// 			icon: User,
+	// 		},
+	// 	],
+	// },
 	{
 		name: "Home",
 		path: routes.user.home,

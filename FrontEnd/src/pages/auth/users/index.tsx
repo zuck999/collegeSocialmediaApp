@@ -1,8 +1,8 @@
-import Sidebar from "@/layout";
-import { UserRoleUnion } from "@/utils/general";
+// import Sidebar from "@/layout";
+// import { UserRoleUnion } from "@/utils/general";
 
 function index() {
-	return <Sidebar userRole={UserRoleUnion.USER} />;
+	return <div>hello</div>
 }
 
 export default index;

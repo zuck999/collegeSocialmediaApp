@@ -7,17 +7,27 @@ import SideBar from "./sidebar.layout";
 
 const LayoutContent: React.FC<{ userRole: UserRoleUnion }> = ({ userRole }) => {
 	return (
-		<div className="min-h-screen flex flex-col">
-			<Header className="bg-white border h-[60px]" />
+<div className="h-screen flex flex-col">
+	{/* Header */}
+	<div className="h-[60px] bg-white border-b shrink-0 flex items-center">
+		<Header />
+	</div>
 
-			<div className="flex flex-1">
-				<SideBar userRole={userRole} className="hidden bg-white md:block " />
+	{/* Content area */}
+	<div className="flex-1 flex min-h-0">
+		{/* Sidebar */}
+		<aside className="hidden md:flex w-[250px] lg:w-[280px] border-r shrink-0 overflow-auto">
+			<SideBar userRole={userRole} />
+		</aside>
 
-				<main className="flex-1 bg-zinc-100 p-4">
-					<Outlet />
-				</main>
+		{/* Main content */}
+		<main className="flex-1 bg-zinc-100 overflow-auto">
+			<div className="p-4">
+				<Outlet />
 			</div>
-		</div>
+		</main>
+	</div>
+</div>
 	);
 };
 

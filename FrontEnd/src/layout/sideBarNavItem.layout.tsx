@@ -11,7 +11,7 @@ const sidebarNavItemVariants = cva(
 		variants: {
 			variant: {
 				default: "text-foreground",
-				active: "bg-primary text-primary-foreground",
+				active: "bg-zinc-200 text-zync-200",
 			},
 		},
 		defaultVariants: {

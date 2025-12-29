@@ -49,7 +49,7 @@ const SideBar = ({
 	return (
 		<aside
 			className={cn(
-				"fixed inset-y-0 left-0 z-40  w-64 overflow-y-auto bg-sidebar px-4 py-15 transition-all duration-300 ease-in-out lg:translate-x-0",
+				"w-full h-full bg-sidebar px-4 py-6",
 				className,
 			)}
 		>
