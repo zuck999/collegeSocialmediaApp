@@ -75,7 +75,7 @@ export const login = async(req,res)=>{
         if(email==process.env.EMAIL && password == process.env.PASSWORD){
 
            const user = {
-                _id:"64891aefd53c9e0aaf2b91a7",
+                _id:"6953e683cc0573be9c455e73",
                 username:'Admin',
                 email:"--",
                 profilePicture:"https://static.vecteezy.com/system/resources/previews/000/290/610/non_2x/administration-vector-icon.jpg",
