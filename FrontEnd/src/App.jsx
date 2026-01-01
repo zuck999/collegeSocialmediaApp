@@ -7,6 +7,7 @@ import Profile from './components/Profile';
 import EditProfile from './components/EditProfile';
 import EditUser from './components/EditUser';
 import ReduxTest from './components/reduxTest';
+import ChatPage from './components/ChatPage';
 
 
 
@@ -30,6 +31,9 @@ const brousingRouter = createBrowserRouter([
       },{
         path:'/redux/:id',
         element:<ReduxTest/>
+      },{
+        path:'/chat',
+        element:<ChatPage/>
       }
     ]
   },
