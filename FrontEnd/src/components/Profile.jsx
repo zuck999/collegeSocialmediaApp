@@ -24,7 +24,8 @@ function Profile() {
   }
   
   
-  const displayedPost = activeTab==='post' ? userprofile?.post : userprofile?.bookmarks
+  // const displayedPost = activeTab==='post' ? userprofile?.post : userprofile?.bookmarks
+  const displayedPost =  userprofile?.post || [];
 
 
   return (

@@ -10,7 +10,7 @@ function Posts() {
   return (
     <>
 
-      <div>
+      <div className='w-full'>
         {
          posts.map((post)=><Post key={post._id} post={post} />)
         }

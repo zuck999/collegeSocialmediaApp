@@ -9,6 +9,7 @@ import EditUser from './components/EditUser';
 import ReduxTest from './components/reduxTest';
 
 
+
 const brousingRouter = createBrowserRouter([
   {
     path:"/",
@@ -47,11 +48,11 @@ function App() {
 
 
   return (
-    <>
+    <div>
       
-    <RouterProvider router={brousingRouter}/> 
+      <RouterProvider router={brousingRouter}/> 
 
-    </>
+    </div>
     
   )
 }

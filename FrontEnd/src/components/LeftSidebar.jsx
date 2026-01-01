@@ -38,6 +38,7 @@ function LeftSideBar() {
     }
 
     function sidebarHandler(textType){
+        console.log(">>",open)
         if(textType==="Logout"){logoutHandler()};
         if(textType==="Create Post"){ setOpen(true)};//dilague box of create post
         if(textType==="Profile"){ nevicate(`/Profile/${user._id}`)};
@@ -110,29 +111,24 @@ function LeftSideBar() {
   return (
     <>
 
-    <div className=" fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen">
+<div className="flex flex-col h-full p-4">
 
-        <div className='flex flex-col  '>
-            <h1 className='font-extrabold my-7 pl-3 text-xl'>
-               <Link to={`/redux/${user?._id}`}>campus Network</Link>
-            </h1>
-            <div>
-                {
-                    sidebarItems.map((item,index)=>{
-                        return(
-                            <div onClick={()=>sidebarHandler(item.text)} key={index} className='flex items-center gap-2 my-4 font-bold relative hover:bg-gray-100 cursor-pointer rounded-lg p-3 '>
-                            {item.icon}
-                            <span>{item.text}</span>
-                            </div>
-                            )
-                    })
-                }
-            </div>
-        </div> 
-        
-                <CreatePost open={open} setOpen={setOpen}/>
-
-        </div>
+      
+      <div className="flex-1">
+        {sidebarItems.map((item, index) => (
+          <div 
+            key={index} 
+            onClick={() => sidebarHandler(item.text)} 
+            className="flex items-center gap-3 my-2 font-semibold hover:bg-gray-100 cursor-pointer rounded-lg p-3 transition-all"
+          >
+            {item.icon}
+            <span>{item.text}</span>
+          </div>
+        ))}
+      </div>
+      
+      <CreatePost open={open} setOpen={setOpen}/>
+    </div>
 
     </>
     

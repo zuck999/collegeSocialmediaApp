@@ -73,18 +73,34 @@ export const getAllPost = async(_,res)=>{
 
 export const getUserPost = async (req,res)=>{
     try{
-        const authorId = req.id;
-        const posts = await Post.find({author:authorId}).short({createdAt:-1}).populate({
-            path:'author',
-            select:'username,profilepicture'
-        }).populate({
-            path:"comments",
-            sort:{createdAt:- -1},
-            populate:{
-                paht:'author',
-                select:'username,profilePicture'
-            }
+
+        const posts = await Post.find({ author: authorId })
+        .sort({ createdAt: -1 })
+        .populate({
+            path: 'author',
+            select: 'username profilePicture',
+        })
+        .populate({
+            path: 'comments',
+            options: { sort: { createdAt: -1 } }, // latest comments first
+            populate: {
+            path: 'author',
+            select: 'username profilePicture',
+            },
         });
+
+        // const authorId = req.id;
+        // const posts = await Post.find({author:authorId}).sort({createdAt:-1}).populate({
+        //     path:'author',
+        //     select:'username,profilepicture'
+        // }).populate({
+        //     path:"comments",
+        //     sort:{createdAt:- -1},
+        //     populate:{
+        //         paht:'author',
+        //         select:'username,profilePicture'
+        //     }
+        // });
         return res.status(200).json({
             posts,
             success:true,

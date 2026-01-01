@@ -10,7 +10,7 @@ function RightSideBar() {
   const altImg = "https://static.vecteezy.com/system/resources/previews/003/715/527/non_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-vector.jpg";
   const {user} = useSelector((store)=>store.auth);
   return (
-    <div className="w-fit  mr-20 mt-5 max-h-[70vh]">   
+    <div className="w-full  mr-20 mt-5 max-h-[70vh] p-4">   
             <div className="flex items-center gap-2">
             <Link to={`/profile/${user?._id}`}>
             <Avatar>
