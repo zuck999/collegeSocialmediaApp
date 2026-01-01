@@ -1,5 +1,4 @@
 import express, { urlencoded } from "express";
-const app = express();
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
@@ -7,7 +6,10 @@ import connectDB from "./utils/db.js";
 import userRoute from "./routes/user.route.js"
 import postRoute from "./routes/post.rout.js"
 import messageRoute from "./routes/message.route.js"
+import { app , server } from "./socket/socket.js";
+
 dotenv.config({});
+
 
 const port = process.env.PORT || 8000;
 
@@ -36,9 +38,8 @@ app.use("/api/v1/message",messageRoute);
 
 
 
-app.listen(port,()=>{
+server.listen(port,()=>{
     connectDB();
     console.log(`server listen at port ${port}`)
 });
-
 
