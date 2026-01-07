@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
 import userRoute from "./routes/user.route.js"
-import postRoute from "./routes/post.rout.js"
+import postRoute from "./routes/post.route.js"
 import messageRoute from "./routes/message.route.js"
 import { app , server } from "./socket/socket.js";
 
@@ -25,11 +25,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({extended:true}));
 
-const crosOption = {
+const corsOption = {
     origin:`http://localhost:5173`,
     credentials:true,
 }
-app.use(cors(crosOption));
+app.use(cors(corsOption));
 
 // api
 app.use("/api/v1/user",userRoute);

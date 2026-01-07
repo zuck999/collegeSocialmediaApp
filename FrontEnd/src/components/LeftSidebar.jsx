@@ -24,8 +24,9 @@ function LeftSideBar() {
     const logoutHandler = async()=>{
         try {
             const res = await axios.get('http://localhost:8000/api/v1/user/logout',{withCredentials:true});
+            console.log("res>.",res)
             if(res.data.success){
-                console.log("if vitra")
+                console.log("vitra");
                 toast.success(res.data.message);
                 dispatch(setAuthUser(null));
                 dispatch(setSelectedPost(null));
@@ -38,12 +39,12 @@ function LeftSideBar() {
     }
 
     function sidebarHandler(textType){
-        console.log(">>",open)
         if(textType==="Logout"){logoutHandler()};
         if(textType==="Create Post"){ setOpen(true)};//dilague box of create post
         if(textType==="Profile"){ nevicate(`/Profile/${user._id}`)};
         if(textType==="Home"){ nevicate(`/`)};
         if(textType==="Edit user"){ nevicate(`/editUser`)};
+        if(textType==="Message"){ nevicate(`/chat`)};
     }
 
     const [sidebarItems , setSidebarItems] = useState([

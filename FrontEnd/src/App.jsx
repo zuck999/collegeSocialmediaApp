@@ -56,7 +56,10 @@ const brousingRouter = createBrowserRouter([
 
 function App() {
   const {user} = useSelector(store => store.auth);
+  const {socket} = useSelector(store=>store.socketio);
   const dispatch = useDispatch();
+
+
   useEffect(()=>{
     if(user){
       const socketio = io("http://localhost:8000",{
@@ -66,10 +69,12 @@ function App() {
         transports:['websocket']
       });
       dispatch(setSocket(socketio));
-
+      
       //listning all event       baki----
-
-      socketio.on('getOnlineUsers',(onlineUser)=>{
+      
+      console.log("---------------------online user<><><>")//printing
+      socketio.on('getOnlineUser',(onlineUser)=>{
+      console.log("---------------------online user<>--<>")//not printing why
         dispatch(setOnlineUsers(onlineUser));
       });
 
@@ -77,12 +82,12 @@ function App() {
         socketio.close();
         dispatch(setSocket(null));
       }
-    }else{
-        socketio.close();
+    }else if(socket){
+        socket?.close();
         dispatch(setSocket(null));
     }
 
-  },[user , dispatch]);
+  },[user , dispatch]);//10:53:11
 
 
   return (

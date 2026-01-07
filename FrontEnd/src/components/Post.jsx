@@ -198,7 +198,7 @@ console.log(">>>>",post.createdAt);
   <div className="px-4">
     <div className="flex items-center justify-around border-t border-gray-100 py-1">
       <button onClick={likeDislikeHandler} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg hover:bg-gray-50 transition-all active:scale-95 group">
-        <ThumbsUp size={20} className={`${liked ? "text-[#0866FF] fill-[#0866FF]" : "text-gray-500 group-hover:text-gray-700"}`} />
+        <ThumbsUp size={20} className={`${liked ? "text-[#0866FF] fill-[#0867ffad]" : "text-gray-500 group-hover:text-gray-700"}`} />
         <span className={`text-sm font-bold ${liked ? "text-[#0866FF]" : "text-gray-500"}`}>Like</span>
       </button>
 

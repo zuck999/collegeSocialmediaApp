@@ -8,11 +8,14 @@ import { Button } from './ui/button';
 import { setSelectedUser } from '@/redux/authSlice';
 import Messages from './Messages';
 
+
 function ChatPage() {
     const {user , suggestedUsers , selectedUser} = useSelector(store=>store.auth);
-    const [isOnline,setIsOnline] = useState(true);
+    // const [isOnline,setIsOnline] = useState(true);
     const dispatch = useDispatch();
-    console.log(">>",selectedUser);
+
+    const {onlineUsers} = useSelector(store=>store.chat);
+    console.log("online usere []>>",onlineUsers);
 
   return (
    
@@ -23,6 +26,7 @@ function ChatPage() {
             <div className='overflow-y-auto h-[80vh]'>
                 {
                      suggestedUsers.map((suggesteduser)=>{
+                        const isOnline = onlineUsers.includes(suggesteduser?._id);
                         return (
                             <div onClick={()=> dispatch(setSelectedUser(suggesteduser))} className='flex gap-3 p-3 items-center hover:bg-gray-50 cursor-pointer'>
                                 <Avatar>
@@ -69,4 +73,4 @@ function ChatPage() {
   )
 }
 
-export default ChatPage
+export default ChatPage;
