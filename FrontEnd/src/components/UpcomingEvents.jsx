@@ -3,15 +3,14 @@ import { Avatar, AvatarFallback } from './ui/avatar'
 
 function UpcomingEvents() {
   return (
-    <div className="bg-white w-full max-h-[60vh] flex flex-col rounded-lg">
-
+    <div className="bg-white w-full h-full flex flex-col rounded-lg">
 
       <div className="text-md font-medium p-2 sticky top-0 z-10">
         Upcoming events
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {[1,2,3,4,5,6,7,8,9].map((event) => (
+        {[1,2,3,4,5,6,7,8,9,0,0,0].map((event) => (
           <div
             key={event}
             className="flex items-center p-2 border-b gap-x-2"
@@ -24,7 +23,7 @@ function UpcomingEvents() {
             </Avatar>
 
             <div>
-              <div className="text-lg">BCA Cup</div>
+              <div className="text-lg">BCA Cup{event}</div>
               <div className="text-gray-500 text-sm">Feb 22</div>
             </div>
           </div>

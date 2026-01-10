@@ -10,7 +10,7 @@ function AllUsers() {
   return (
     <div className="my-10">
       <div className="flex items-center justify-between text-sm gap-3">
-        <h1 className=" font-semibold text-gray-600"> All logined users </h1>
+        <h1 className=" font-semibold text-gray-600"> All users </h1>
         <span className="font-medium cursor-pointer">...</span>
       </div>
 

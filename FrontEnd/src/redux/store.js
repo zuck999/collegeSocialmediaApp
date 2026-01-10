@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 import  postSlice  from "./postSlice.js";
 import socketSlice from "./socketSlice";
 import chatSlice from "./chatSlice";
+import rtnSlice from "./RTNSlice";
 
 
 //other from redux presist used bcoz when the page is reloded the data in the store
@@ -28,7 +29,8 @@ const rootReducer = combineReducers({
     auth:authSlice,
     post:postSlice,
     socketio:socketSlice,
-    chat:chatSlice
+    chat:chatSlice,
+    realTimeNotification:rtnSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

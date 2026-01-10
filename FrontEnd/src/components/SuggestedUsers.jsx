@@ -45,7 +45,7 @@ function SuggestedUsers() {
                 </div>
               </div>
             </div>
-                <soan className="  text-xs text-sky-700  cursor-pointer hover:text-stone-400 ml-1  px-1 py-0 ">+Add Friend</soan>
+                <span className="  text-xs text-sky-700  cursor-pointer hover:text-stone-400 ml-1  px-1 py-0 ">+Add Friend </span>
           </div>
         );
       })

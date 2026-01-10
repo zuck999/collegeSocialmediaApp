@@ -14,6 +14,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSocket } from './redux/socketSlice';
 import { setOnlineUsers } from './redux/chatSlice';
+import AddEvents from './components/AddEvents';
+import { setLikeNotification } from './redux/RTNSlice';
 
 
 
@@ -40,6 +42,9 @@ const brousingRouter = createBrowserRouter([
       },{
         path:'/chat',
         element:<ChatPage/>
+      },{
+        path:'/addEvents',
+        element:<AddEvents/>
       }
     ]
   },
@@ -77,6 +82,11 @@ function App() {
       console.log("---------------------online user<>--<>")//not printing why
         dispatch(setOnlineUsers(onlineUser));
       });
+
+      //notification
+      socketio.on("notification",(notification)=>{
+        dispatch(setLikeNotification(notification));
+      })
 
       return ()=>{//cleanUp   
         socketio.close();

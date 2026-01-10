@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback } from './ui/avatar'
 
 function Birthdays() {
   return (
-      <div className="bg-white w-full max-h-[60vh] flex flex-col rounded-lg overflow-y-hidden">
+      <div className="bg-white w-full  h-full flex flex-col rounded-lg overflow-y-hidden">
 
         {/* Header */}
         <div className="text-md font-medium p-2 shrink-0 border-b bg-white z-10">
@@ -11,7 +11,7 @@ function Birthdays() {
         </div>
 
         {/* Scroll area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto ">
           {[1,2,3,4,5,6,7,8,9].map((event) => (
             <div
               key={event}
@@ -24,7 +24,7 @@ function Birthdays() {
               </Avatar>
 
               <div>
-                <div className="text-lg">Sagar Panta</div>
+                <div className="text-lg">Sagar Panta{event}</div>
                 <div className="text-gray-500 text-sm">Turning 21 years old</div>
               </div>
             </div>

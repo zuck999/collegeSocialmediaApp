@@ -3,6 +3,7 @@ import cloudinary from "../utils/cloudanary.js";
 import {Post} from "../model/post.model.js";
 import { User } from "../model/user.model.js";
 import { Comment } from "../model/comment.model.js";
+import { getReciverSocketId, io } from "../socket/socket.js";
 
 export const addNewPost = async(req,res)=>{
     try{
@@ -123,6 +124,20 @@ export const likePost = async(req,res)=>{
         await post.save();
 
         //  shocketIO -- realtime notifacition
+        const user = await User.findById(likeGarneWalaKoId).select("username profilePicture");
+        const ownerId = post.author.toString();
+        if(ownerId !== likeGarneWalaKoId){
+            //emmit notification event
+            const notifacation = {
+                type:"like",
+                userId:likeGarneWalaKoId,
+                userDetails:user,
+                postId,
+                message:"Your post was liked"
+            }
+            const postOwnerSocketId = getReciverSocketId(ownerId);
+            io.to(postOwnerSocketId).emit("notification",notifacation);  //emmiting notification
+        }
 
         return res.status(200).json({message:'post liked',success:true});
 
@@ -145,6 +160,20 @@ export const disLikePost = async(req,res)=>{
         await post.save();
 
         // implement shocketIO for realtime notifacition
+            const user = await User.findById(likeGarneWalaKoId).select("username profilePicture");
+        const ownerId = post.author.toString();
+        if(ownerId !== likeGarneWalaKoId){
+            //emmit notification event
+            const notifacation = {
+                type:"dislike",
+                userId:likeGarneWalaKoId,
+                userDetails:user,
+                postId,
+                message:"Your post was disliked"
+            }
+            const postOwnerSocketId = getReciverSocketId(ownerId);
+            io.to(postOwnerSocketId).emit("notification",notifacation);  //emmiting notification
+        }
 
 
         return res.status(200).json({message:'post disliked',success:true});

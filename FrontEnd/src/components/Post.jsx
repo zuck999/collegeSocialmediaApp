@@ -152,7 +152,6 @@ console.log(">>>>",post.createdAt);
               Delete Post
             </Button>
           )}
-          <Button variant="ghost" className="w-full font-medium">Copy Link</Button>
         </div>
       </DialogContent>
     </Dialog>

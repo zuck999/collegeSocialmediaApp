@@ -1,21 +1,45 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Input } from './ui/input';
-import { MessageCircleDashedIcon } from 'lucide-react';
+import { MessageCircleDashedIcon, Send } from 'lucide-react';
 import { Button } from './ui/button';
 import { setSelectedUser } from '@/redux/authSlice';
 import Messages from './Messages';
+import { setMessages } from '@/redux/chatSlice';
+import axios from 'axios';
 
 
 function ChatPage() {
+    const [textMessage , setTextMessage] = useState("");
     const {user , suggestedUsers , selectedUser} = useSelector(store=>store.auth);
     // const [isOnline,setIsOnline] = useState(true);
     const dispatch = useDispatch();
 
-    const {onlineUsers} = useSelector(store=>store.chat);
+    const {onlineUsers , messages} = useSelector(store=>store.chat);
+
     console.log("online usere []>>",onlineUsers);
+
+    async function sendMessageHandler(reciverId){
+        console.log("click");
+        try {
+            const res = await axios.post(`http://localhost:8000/api/v1/message/send/${reciverId}`,{textMessage},{headers:{"Content-Type":"application/json"},withCredentials:true});
+            if(res.data.success){
+                console.log("works----------->>")
+                dispatch(setMessages([...messages , res.data.newMessage]));
+                setTextMessage("");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(()=>{
+        return ()=>{
+            dispatch(setSelectedUser(null));//cleanup code after user go to home
+        }
+    },[]);
 
   return (
    
@@ -57,8 +81,19 @@ function ChatPage() {
                     </div>
                     <Messages selectedUser={selectedUser}/>
                     <div className='flex items-center p-4 border-t border-t-gray-300 '>
-                        <Input type="text" className="flex-1 mr-2 focus-visible:ring-transparent" placeholder="messages..."/>
-                        <Button>send</Button>
+                        <Input 
+                            value={textMessage} 
+                            onChange={(e) => setTextMessage(e.target.value)} 
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && textMessage.trim() !== "") {
+                                    sendMessageHandler(selectedUser?._id);
+                                }
+                            }}
+                            type="text" 
+                            className="flex-1 mr-2 focus-visible:ring-transparent" 
+                            placeholder="messages..."
+                        />
+                        <Button onClick={() => sendMessageHandler(selectedUser?._id)} className="bg-blue-500 hover:bg-blue-400">Send <Send className='hover:bg-current'/></Button>
                     </div>
                 </section>
             ):(

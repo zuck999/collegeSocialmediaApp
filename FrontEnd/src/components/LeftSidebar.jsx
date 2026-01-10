@@ -1,4 +1,4 @@
-import { Bell,  Home, LogOut, MessageCircle, PlusSquare, Search , UserPen } from 'lucide-react'
+import { Bell,  CalendarPlus,  Home, LogOut, MessageCircle, PlusSquare, Search , UserPen } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setAuthUser } from '@/redux/authSlice'
 import CreatePost from './CreatePost'
 import { setPosts, setSelectedPost } from '@/redux/postSlice'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { Button } from './ui/button'
 
 
 
@@ -16,6 +18,8 @@ function LeftSideBar() {
     const nevicate = useNavigate();
     const dispatch = useDispatch();
     const {user} = useSelector(store=>store.auth)//getting user from store
+
+    const {likeNotification} = useSelector(store=>store.realTimeNotification);
 
 
     const [open , setOpen] = useState(false);
@@ -44,6 +48,7 @@ function LeftSideBar() {
         if(textType==="Profile"){ nevicate(`/Profile/${user._id}`)};
         if(textType==="Home"){ nevicate(`/`)};
         if(textType==="Edit user"){ nevicate(`/editUser`)};
+        if(textType==="Add Events"){ nevicate(`/addEvents`)};
         if(textType==="Message"){ nevicate(`/chat`)};
     }
 
@@ -72,6 +77,8 @@ function LeftSideBar() {
             setSidebarItems([
                 { icon: <Home />, text: "Home" },
                 { icon: <UserPen />, text: "Edit user" },
+                { icon: <CalendarPlus/>, text: "Add Events" },
+                
                 {
                     icon: (
                         <Avatar className="w-7 h-7">
@@ -124,6 +131,36 @@ function LeftSideBar() {
           >
             {item.icon}
             <span>{item.text}</span>
+            {
+                item.text === "Notification" && likeNotification.length > 0 && (
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <div>
+                                <Button size="icon" className="rounded-full h-5 w-5 absolute bottom-6 left-6">{likeNotification.length}</Button>
+                            </div>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                            <div>
+                                {
+                                    likeNotification.length === 0 ? (<p> no notification</p>):(
+                                        likeNotification.map((not)=>{
+                                            return (
+                                                <div key={not.userId}>
+                                                        <Avatar className="w-7 h-7">
+                                                            <AvatarImage src={not?.userDetails?.profilePicture || "https://static.vecteezy.com/system/resources/previews/003/715/527/non_2x/picture-profile-icon-male-icon-human-or-people-sign-and-symbol-vector.jpg"}/>
+                                                            <AvatarFallback />
+                                                        </Avatar>
+                                                        <p className='text-sm'><span className='font-bold'>{not?.userDetails?.username} Liked your post</span></p>
+                                                </div>
+                                            )
+                                        }
+                                    )) 
+                                }
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+                )
+            }
           </div>
         ))}
       </div>
