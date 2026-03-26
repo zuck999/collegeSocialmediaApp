@@ -16,6 +16,7 @@ import { setSocket } from './redux/socketSlice';
 import { setOnlineUsers } from './redux/chatSlice';
 import AddEvents from './components/AddEvents';
 import { setLikeNotification } from './redux/RTNSlice';
+import CollegeSocialUI from"./practice"
 
 
 
@@ -45,6 +46,9 @@ const brousingRouter = createBrowserRouter([
       },{
         path:'/addEvents',
         element:<AddEvents/>
+      },{
+        path:"/practice",
+        element:<CollegeSocialUI/>
       }
     ]
   },

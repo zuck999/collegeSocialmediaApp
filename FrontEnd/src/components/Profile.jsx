@@ -1,116 +1,165 @@
 import React, { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { 
+  Heart, 
+  MessageCircle, 
+  Settings,
+  MessageSquare
+} from "lucide-react";
 import useGetUserProfile from "@/hooks/useGetUserProfile";
-import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
-import { AtSign, Heart, MessageCircle } from "lucide-react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedUser } from '@/redux/authSlice';
 
 function Profile() {
   const params = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userId = params.id;
+  
   useGetUserProfile(userId);
-  const  {userprofile ,user}  = useSelector((store) => store.auth);
+  const { userprofile, user } = useSelector((store) => store.auth);
 
+  const isLoginUserProfile = user?._id === userprofile?._id;
+  const [activeTab, setActiveTab] = useState('posts');
 
-  const isLoginUserProfile = user?._id == userprofile?._id;
-  const isFriend = false;
-  const [ activeTab , setActiveTag] = useState('post');
-  
-  
-  function handleTabChange(tab){
-    setActiveTag(tab);
-  }
-  
-  
-  // const displayedPost = activeTab==='post' ? userprofile?.post : userprofile?.bookmarks
-  const displayedPost =  userprofile?.post || [];
+  const handleChatClick = () => {
+    dispatch(setSelectedUser(userprofile));
+    navigate('/chat');
+  };
 
+  const displayedPost = activeTab === 'posts' 
+    ? userprofile?.post || [] 
+    : userprofile?.bookmarks || [];
+
+  const postCount = userprofile?.post?.length || 0;
 
   return (
-    <div className="flex max-w-4xl justify-center mx-auto pl-10">
-      <div className="flex flex-col gap-20 p-8">
-        <div className="grid grid-cols-2">
-          <section className="flex items-center justify-center">
-            <Avatar className="h-32 w-32">
-              <AvatarImage src={userprofile?.profilePicture}alt="profilephoto"/>
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </section>
-          <section>
-            <div className="flex flex-col gap-5">
-              <div className="flex items-center gap-2">
-              <span>{userprofile?.username}</span>
-              {
-                isLoginUserProfile ? (
-                  <>
-                  <Link to="/account/edit"><Button className="hover:bg-gray-700 h-8">Edit Profile</Button></Link>
-                  </>
-                ):(
-                  isFriend ? (
-                    <>
-                    <Button className="bg-sky-500 h-8">Add Friend</Button>
-                    </>
-                  ):(
-                    <>
-                    <Button className="bg-sky-500 h-8">Add Friend</Button>
-                    <Button className="bg-sky-500 h-8">message</Button>
-                    </>
-                  )
-                  )
-              }
+    <div className="max-w-4xl mx-auto px-4 py-6">
+      {/* Profile Header */}
+      <div className="flex items-start gap-6 mb-8 pb-8 border-b">
+        {/* Avatar */}
+        <Avatar className="h-24 w-24 md:h-32 md:w-32">
+          <AvatarImage 
+            src={userprofile?.profilePicture} 
+            alt={userprofile?.username}
+          />
+          <AvatarFallback className="text-2xl font-semibold ">
+            {userprofile?.username?.charAt(0).toUpperCase() || 'U'}
+          </AvatarFallback>
+        </Avatar>
 
-              </div>
-              <div className="flex items-center gap-4">
-                <p><span className="font-semibold"> {userprofile?.post?.length} </span>posts</p>
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold">{userprofile?.hobby || 'hobby here..'}</span>
-                <Badge className="bg-slate-400 w-fit"><AtSign/> <span className="pl-1">{userprofile?.username}</span></Badge>
-                <span>hello devs</span>
-              </div>
-            </div>
-          </section>
-        </div>
-        <div className="">
-          <div className="flex justify-center gap-10 text-sm border border-gray-200 rounded">
-          <span onClick={()=>handleTabChange("post")} className={`cursor-pointer ${activeTab==='post'?'font-bold':''}`}>
-                post
-              </span>
-              <span onClick={()=>handleTabChange("saved")} className={`cursor-pointer ${activeTab==='saved'?'font-bold':''}`}>
-                Friends
-              </span >
-              {/* <span onClick={()=>handleTabChange("reels")} className={`cursor-pointer ${activeTab==='reels'?'font-bold':''}`}>
-              saved
-              </span>      */}
+        {/* Info */}
+        <div className="flex-1">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-2xl font-semibold">
+              {userprofile?.username || 'username'}
+            </h1>
+            
+            {isLoginUserProfile ? (
+              <Link to="/account/edit">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Edit
+                </Button>
+              </Link>
+            ) : (
+              <Button 
+                onClick={handleChatClick}
+                size="sm"
+                className="gap-2"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Message
+              </Button>
+            )}
           </div>
-          <div className="grid grid-cols-3 gap-1">
-                {
-                  displayedPost.map((post)=>{
-                    console.log(post?.comments.length);
-                    return(
-                      <div key={post?._id} className='relative group cursor-pointer'>
-                      <img src={post.image} alt='postimage' className='rounded-sm my-2 w-full aspect-square object-cover' />
-                      <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
-                        <div className='flex items-center text-white space-x-4'>
-                          <button className='flex items-center gap-2 hover:text-gray-300'>
-                            <Heart />
-                            <span>{post?.likes.length}</span>
-                          </button>
-                          <button className='flex items-center gap-2 hover:text-gray-300'>
-                            <MessageCircle />
-                            <span>{post?.comments.length}</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    )
-                  })
-                }
-              </div>
+
+          {/* Stats */}
+          <div className="flex gap-8 mb-4">
+            <div>
+              <span className="font-semibold">{postCount}</span>
+              <span className="text-gray-600 dark:text-gray-400 ml-1">posts</span>
+            </div>
+          </div>
+
+          {/* Bio */}
+          <div>
+            <p className="font-semibold mb-1">
+              {userprofile?.fullName || userprofile?.username}
+            </p>
+            {userprofile?.bio && (
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                {userprofile.bio}
+              </p>
+            )}
+            {userprofile?.hobby && (
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                {userprofile.hobby}
+              </p>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Tabs */}
+      <div className="flex border-b mb-6">
+        <button
+          onClick={() => setActiveTab('posts')}
+          className={`flex-1 py-3 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === 'posts'
+              ? 'border-black dark:border-white text-black dark:text-white'
+              : 'border-transparent text-gray-400'
+          }`}
+        >
+          POSTS
+        </button>
+        {/* <button
+          onClick={() => setActiveTab('saved')}
+          className={`flex-1 py-3 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === 'saved'
+              ? 'border-black dark:border-white text-black dark:text-white'
+              : 'border-transparent text-gray-400'
+          }`}
+        >
+          SAVED
+        </button> */}
+      </div>
+
+      {/* Posts Grid */}
+      {displayedPost.length > 0 ? (
+        <div className="grid grid-cols-3 gap-1">
+          {displayedPost.map((post) => (
+            <div
+              key={post?._id}
+              className="relative aspect-square cursor-pointer group"
+            >
+              <img
+                src={post?.image}
+                alt="post"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-6 text-white">
+                <div className="flex items-center gap-1">
+                  <Heart className="h-5 w-5 fill-white" />
+                  <span className="font-semibold">{post?.likes?.length || 0}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <MessageCircle className="h-5 w-5 fill-white" />
+                  <span className="font-semibold">{post?.comments?.length || 0}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-20">
+          <p className="text-gray-400 text-sm">
+            {activeTab === 'posts' ? 'No posts yet' : 'No saved posts'}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

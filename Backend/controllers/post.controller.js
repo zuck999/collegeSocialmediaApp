@@ -48,28 +48,57 @@ export const addNewPost = async(req,res)=>{
 }
 
 
-export const getAllPost = async(_,res)=>{
-    try{
-    const posts = await Post.find().sort({createdAt:1})
-    .populate({path:'author',select:'username  profilePicture'}).
-    populate({
-        path:'comments',
-        short:{createdAt:-1},
-        populate:{
-            path:'author',
-            select:'username profilePicture'
-        }
-    });
+export const getAllPost = async (_, res) => {
+    try {
+        const posts = await Post.find()
+            .sort({ createdAt: -1 })
+            // Just add 'faculty batch' to the select string here
+            .populate({ 
+                path: 'author', 
+                select: 'username profilePicture faculty batch' 
+            })
+            .populate({
+                path: 'comments',
+                sort: { createdAt: -1 }, // Changed "short" to "sort"
+                populate: {
+                    path: 'author',
+                    select: 'username profilePicture'
+                }
+            });
 
-    return res.status(200).json({
-        posts,
-        success:true,
-    });
+        return res.status(200).json({
+            posts,
+            success: true,
+        });
 
-    }catch(err){
+    } catch (err) {
         console.log(err);
+        return res.status(500).json({ success: false, message: "Server Error" });
     }
 }
+
+// export const getAllPost = async(_,res)=>{
+//     try{
+//     const posts = await Post.find().sort({createdAt:1})
+//     .populate({path:'author',select:'username  profilePicture'}).
+//     populate({
+//         path:'comments',
+//         short:{createdAt:-1},
+//         populate:{
+//             path:'author',
+//             select:'username profilePicture'
+//         }
+//     });
+
+//     return res.status(200).json({
+//         posts,
+//         success:true,
+//     });
+
+//     }catch(err){
+//         console.log(err);
+//     }
+// }
 
 
 export const getUserPost = async (req,res)=>{

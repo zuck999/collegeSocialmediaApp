@@ -9,7 +9,6 @@ import UpcomingEvents from "./UpcomingEvents";
 
 function Home() {
   useGetAllPost();
-  console.log(useGetAllPost());
   useGetSuggestedUsers();
 
   return (

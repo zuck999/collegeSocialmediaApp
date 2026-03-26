@@ -16,6 +16,8 @@ function ChatPage() {
     const {user , suggestedUsers , selectedUser} = useSelector(store=>store.auth);
     // const [isOnline,setIsOnline] = useState(true);
     const dispatch = useDispatch();
+    const ADMIN_ID = import.meta.env.VITE_ADMIN_ID;
+
 
     const {onlineUsers , messages} = useSelector(store=>store.chat);
 
@@ -40,36 +42,55 @@ function ChatPage() {
             dispatch(setSelectedUser(null));//cleanup code after user go to home
         }
     },[]);
+    console.log("suggestedusers>>>",suggestedUsers)
 
   return (
    
-    <div className='flex ml-[16%] h-full '>
-        <section>
-            <h1 className='font-bold mb-4 text-3 text-xl'>{user?.username}</h1>
+    <div className='flex h-full '>
+        <section className='min-w-60 border border-r' >
+            <div className='flex justify-center items-center h-16'>
+                <h1 className='font-bold text-3 text-xl m-auto '>{user?.username}</h1>
+            </div>
+
             <hr className='mb-4 border-gray-300'/>
             <div className='overflow-y-auto h-[80vh]'>
-                {
-                     suggestedUsers.map((suggesteduser)=>{
-                        const isOnline = onlineUsers.includes(suggesteduser?._id);
-                        return (
-                            <div onClick={()=> dispatch(setSelectedUser(suggesteduser))} className='flex gap-3 p-3 items-center hover:bg-gray-50 cursor-pointer'>
-                                <Avatar>
-                                    <AvatarImage src={suggesteduser?.profilePicture}/>
-                                    <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
-                                <div  className='flex flex-col'>
-                                    <span className='font-medium'>{suggesteduser?.username}</span>
-                                    <span className={`text-xs font-bold ${isOnline?"text-green-600":"text-red-600"}`}>{isOnline?"onlne":"ofline"}</span>
-                                </div>
-                            </div>
-                        )
-                    })
-                }
+            {
+            suggestedUsers
+                .filter((user) => user._id !== ADMIN_ID)
+                .map((suggesteduser) => {
+                const isOnline = onlineUsers.includes(suggesteduser?._id);
+                const isSelected = selectedUser?._id === suggesteduser?._id;
+
+                return (
+                    <div 
+                    key={suggesteduser._id}
+                    onClick={() => dispatch(setSelectedUser(suggesteduser))} 
+                    className={`flex gap-3 p-3 items-center cursor-pointer transition-colors ${
+                        isSelected ? "bg-red-50" : "hover:bg-zinc-100"
+                    }`}>
+                    {isSelected && <div className="absolute left-0 w-1 h-8 rounded-r-full" />}
+
+                    <Avatar>
+                        <AvatarImage src={suggesteduser?.profilePicture}/>
+                        <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div className='flex flex-col'>
+                        <span className={`font-medium ${isSelected ? " " : "text-black"}`}>
+                        {suggesteduser?.username}
+                        </span>
+                        <span className={`text-xs font-bold ${isOnline ? "text-green-600" : "text-red-600"}`}>
+                        {isOnline ? "online" : "offline"}
+                        </span>
+                    </div>
+                    </div>
+                )
+                })
+            }
             </div>
         </section>
         {
             selectedUser ?(
-                <section className='flex-1 border border-l-gray-300 flex flex-col h-full'>
+                <section className='flex-1  flex flex-col h-full'>
                     <div  className=' flex gap-3 items-center p-3 py-2 border-b border-gray-300 sticky top-0 bg-white z-10'>
                         <Avatar>
                             <AvatarImage src={selectedUser?.profilePicture} alt="profile"/>

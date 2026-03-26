@@ -7,6 +7,7 @@ import userRoute from "./routes/user.route.js"
 import postRoute from "./routes/post.route.js"
 import messageRoute from "./routes/message.route.js"
 import { app , server } from "./socket/socket.js";
+import event from "./routes/event.route.js"
 
 dotenv.config({});
 
@@ -35,6 +36,7 @@ app.use(cors(corsOption));
 app.use("/api/v1/user",userRoute);
 app.use("/api/v1/post",postRoute);
 app.use("/api/v1/message",messageRoute);
+app.use("/api/v1/event",event)
 
 
 

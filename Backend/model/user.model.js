@@ -38,6 +38,11 @@ const userSchema = new mongoose.Schema({
     },
     batch:{
         type:String,
+        default:"",
+        required:true,
+    },
+    dov:{
+        type:String,
         default:""
     },
     hobby:{
@@ -51,3 +56,5 @@ const userSchema = new mongoose.Schema({
 },{timestamps:true});
 
 export const User = mongoose.model("User",userSchema);
+
+// ["csit","bca","bsc"]

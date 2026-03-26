@@ -1,4 +1,4 @@
-import { Bell,  CalendarPlus,  Home, LogOut, MessageCircle, PlusSquare, Search , UserPen } from 'lucide-react'
+import { Bell,  Book,  CalendarPlus,  Home, LogOut, MessageCircle, PlusSquare, Search , UserPen } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { toast } from 'sonner'
@@ -9,7 +9,6 @@ import { setAuthUser } from '@/redux/authSlice'
 import CreatePost from './CreatePost'
 import { setPosts, setSelectedPost } from '@/redux/postSlice'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { Button } from './ui/button'
 
 
 
@@ -18,6 +17,8 @@ function LeftSideBar() {
     const nevicate = useNavigate();
     const dispatch = useDispatch();
     const {user} = useSelector(store=>store.auth)//getting user from store
+
+    console.log("user profile>>>>>>>>>>>>>>>>>>>",user)
 
     const {likeNotification} = useSelector(store=>store.realTimeNotification);
 
@@ -43,20 +44,21 @@ function LeftSideBar() {
     }
 
     function sidebarHandler(textType){
-        if(textType==="Logout"){logoutHandler()};
+        // if(textType==="Logout"){logoutHandler()};
         if(textType==="Create Post"){ setOpen(true)};//dilague box of create post
         if(textType==="Profile"){ nevicate(`/Profile/${user._id}`)};
         if(textType==="Home"){ nevicate(`/`)};
         if(textType==="Edit user"){ nevicate(`/editUser`)};
         if(textType==="Add Events"){ nevicate(`/addEvents`)};
         if(textType==="Message"){ nevicate(`/chat`)};
+        if(textType === "Student Directory"){nevicate("/practice")}
     }
 
     const [sidebarItems , setSidebarItems] = useState([
         { icon: <Home />, text: "Home" },
         { icon: <Search />, text: "Search" },
         { icon: <MessageCircle />, text: "Message" },
-        { icon: <Bell />, text: "Notification" },
+        // { icon: <Bell />, text: "Notification" },
         { icon: <PlusSquare />, text: "Create Post" },
         {
             icon: (
@@ -68,7 +70,6 @@ function LeftSideBar() {
                 </Avatar>
             ), text: "Profile"
         },
-        { icon: <LogOut />, text: "Logout" },
     ]);
 
 
@@ -89,14 +90,13 @@ function LeftSideBar() {
                         </Avatar>
                     ), text: "Profile"
                 },
-                { icon: <LogOut />, text: "Logout" },
             ]);
         } else {
             setSidebarItems([
                 { icon: <Home />, text: "Home" },
-                { icon: <Search />, text: "Search" },
+                // { icon: <Search />, text: "Search" },
                 { icon: <MessageCircle />, text: "Message" },
-                { icon: <Bell />, text: "Notification" },
+                { icon: <Book />, text: "Student Directory" },
                 { icon: <PlusSquare />, text: "Create Post" },
                 {
                     icon: (
@@ -108,12 +108,9 @@ function LeftSideBar() {
                         </Avatar>
                     ), text: "Profile"
                 },
-                { icon: <LogOut />, text: "Logout" },
             ]);
         }
     }, [user]);
-
-
 
 
   return (
@@ -131,7 +128,10 @@ function LeftSideBar() {
           >
             {item.icon}
             <span>{item.text}</span>
-            {
+
+            {/* Notification section ----------------- */}
+
+            {/* {
                 item.text === "Notification" && likeNotification.length > 0 && (
                     <Popover>
                         <PopoverTrigger asChild>
@@ -160,14 +160,18 @@ function LeftSideBar() {
                         </PopoverContent>
                     </Popover>
                 )
-            }
+            } */}
           </div>
         ))}
       </div>
       
       <CreatePost open={open} setOpen={setOpen}/>
-    </div>
-
+      
+        <div className='flex gap-2 font-bold text-red-500' onClick={logoutHandler}>
+            <LogOut/>
+            <h1>Logout</h1>
+            </div>
+        </div>
     </>
     
   )

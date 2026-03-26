@@ -28,8 +28,10 @@ function Post({post}) {
     const [postlike , setPostLike] = useState(post.likes.length);
     const [comment , setComments] = useState(post.comments);
     const dispatch = useDispatch();
+    
 
     dayjs.extend(relativeTime);
+    console.log("ding ding??>>",post)
 
 
 
@@ -105,7 +107,6 @@ function Post({post}) {
           console.log(error);
         }
     }
-console.log(">>>>",post.createdAt);
 
 
   return (
@@ -116,7 +117,7 @@ console.log(">>>>",post.createdAt);
   <div className="flex items-center justify-between p-4">
     <div className="flex items-center gap-3">
       <Avatar className="h-10 w-10 ring-2 ring-gray-50">
-        <AvatarImage src={post.author?.profilepicture || altImg} alt="profile" />
+        <AvatarImage src={post.author?.profilePicture || altImg} alt="profile" />
         <AvatarFallback className="bg-blue-100 text-blue-600 font-bold">CN</AvatarFallback>
       </Avatar>
       
@@ -125,11 +126,13 @@ console.log(">>>>",post.createdAt);
           <Link to={`/profile/${post?.author?._id}`}>
             <h1 className="font-bold text-gray-900 hover:underline">{post?.author?.username}</h1>
           </Link>
-          {user?._id === post?.author?._id && (
+          {user?._id === post?.author?._id ? (
             <Badge variant="secondary" className="bg-blue-50 text-blue-600 hover:bg-blue-100 border-none px-2 py-0 text-[10px] uppercase tracking-wider font-bold">
               Author
             </Badge>
-          )}
+          ): <Badge variant="secondary" className="bg-blue-50 text-blue-600 hover:bg-blue-100 border-none px-2 py-0 text-[10px] uppercase tracking-wider font-bold">
+              {post?.author?.faculty}  . {post?.author?.batch}
+            </Badge>}
         </div>
         <span className="text-xs text-gray-400 font-medium">{dayjs(post.createdAt).fromNow()} • 🌎</span>
       </div>
@@ -177,7 +180,7 @@ console.log(">>>>",post.createdAt);
   {/* 4. STATS BAR */}
   <div className="flex items-center justify-between px-4 py-3">
     <div className="flex items-center -space-x-1">
-      {/* Facebook style overlapping circles */}
+    {/* Facebook style overlapping circles */}
       <div className="bg-blue-500 rounded-full p-1 border-2 border-white z-10">
         <ThumbsUp size={10} className="text-white fill-white" />
       </div>
@@ -189,7 +192,7 @@ console.log(">>>>",post.createdAt);
       </span>
     </div>
     <div className="text-sm text-gray-500 hover:underline cursor-pointer font-medium" onClick={() => { dispatch(setSelectedPost(post)); setOpen(true); }}>
-      {comment.length} comments
+      {post.comments.length} comments
     </div>
   </div>
 
@@ -210,7 +213,7 @@ console.log(">>>>",post.createdAt);
   </div>
 
   {/* 6. COMMENT INPUT BOX */}
-  <div className="p-4 pt-2">
+  {/* <div className="p-4 pt-2">
     <div className="flex items-center gap-2 bg-gray-50 rounded-2xl px-4 py-2 border border-gray-100 focus-within:border-blue-300 focus-within:bg-white transition-all shadow-inner">
       <input 
         type="text" 
@@ -225,7 +228,7 @@ console.log(">>>>",post.createdAt);
         </button>
       )}
     </div>
-  </div>
+  </div> */}
 
   <CommentDialog open={open} setOpen={setOpen} post={post} />
 </div>

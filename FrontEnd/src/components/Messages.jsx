@@ -21,7 +21,7 @@ function Messages({selectedUser}) {
     }, [messages]);
 
   return (
-    <div className='overflow-y-auto flex-1 p-4 scrollbar-hide'>
+    <div className='overflow-y-auto flex-1 p-4 scrollbar-hide '>
             <div className='flex justify-center'>
                 <div className='flex flex-col items-center justify-center'>
                 <Avatar className="h-20 w-20">

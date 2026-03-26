@@ -14,7 +14,7 @@ function RightSideBar() {
             <div className="flex items-center gap-2">
             <Link to={`/profile/${user?._id}`}>
             <Avatar>
-              <AvatarImage src={user?.profilepicture || altImg} alt="post_Image" />
+              <AvatarImage src={user?.profilePicture || altImg} alt="post_Image" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             </Link>

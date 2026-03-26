@@ -14,9 +14,9 @@ import {Post} from '../model/post.model.js';
 export const register = async (req,res)=>{
     try{
         
-        const {username,email,password,faculty} = req.body;
+        const {username,email,password,faculty,batch} = req.body;
         console.log("req.body>>",req.body);
-        if(!email||!password||!username||!faculty){
+        if(!email||!password||!username||!faculty||!batch){
             return res.status(401).json({
                 message:"All fields are required",
                 success:false
@@ -44,6 +44,7 @@ export const register = async (req,res)=>{
             username,
             email,
             faculty,
+            batch,
             password:hashedPassword
         });
 
@@ -81,6 +82,7 @@ export const login = async(req,res)=>{
                 profilePicture:"https://static.vecteezy.com/system/resources/previews/000/290/610/non_2x/administration-vector-icon.jpg",
                 hobby:"--",
                 faculty:"⚙️",
+                batch:"",
                 post:null
             }
 
@@ -133,6 +135,7 @@ export const login = async(req,res)=>{
             profilePicture:user.profilePicture,
             hobby:user.hobby,
             faculty:user.faculty,
+            batch:user.batch,
             post:populatedPost
         }
 
@@ -178,39 +181,44 @@ export const getprofile = async(req,res)=>{
     }
 }
 
-export const editProfile = async (req,res)=>{
-    try{
-
+export const editProfile = async (req, res) => {
+    try {
         const userId = req.id;
-        const {hobby , gender} = req.body;
-        let profilePicture = req.file;
+        const { hobby, gender, dov } = req.body;
+        const profilePicture = req.file;
         let cloudResponse;
-        
-        if(profilePicture){
+
+        // If a new file is uploaded, send it to Cloudinary
+        if (profilePicture) {
             const fileUri = getDataUri(profilePicture);
-            cloudResponse = await cloudinary.uploader.upload(fileUri);
+            cloudResponse = await cloudinary.uploader.upload(fileUri.content);
         }
-        console.log(cloudResponse);
+
         const user = await User.findById(userId);
-        if(!user){
-           return res.status(404).json({
-            message:"user not found",
-            success:false
-           });
-        };
-        if(hobby) user.hobby = hobby;
-        if(gender) user.gender = gender;
-        if(profilePicture) user.profilePicture = cloudResponse.secure_url;
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+                success: false
+            });
+        }
 
+        // Update fields if they are provided in req.body
+        if (typeof hobby !== "undefined") user.hobby = hobby;
+        if (typeof gender !== "undefined") user.gender = gender;
+        if (typeof dov !== "undefined") user.dov = dov;
+        if (cloudResponse) user.profilePicture = cloudResponse.secure_url;
 
-        await user.save()
+        await user.save();
+
+        // Return the full updated user object
         return res.status(200).json({
-            message:" profile updated ",
-            success:true,
+            message: "Profile updated successfully",
+            success: true,
             user
         });
-    }catch(err){
-        console.log("error:",err);
+    } catch (err) {
+        console.error("Edit Profile Error:", err);
+        return res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -236,6 +244,47 @@ export const getSuggestedUsers = async (req,res)=>{
         console.log("err:",err);
     }
 }
+
+
+export const getBatchInfo =  async (req, res) => {
+  try {
+    const { faculty, batch } = req.query;
+
+    if (!faculty || !batch) {
+      return res.status(400).json({ 
+        success:false,
+        message: "Faculty and batch are required parameters." 
+      });
+    }
+
+    const students = await User.find({ 
+      faculty: faculty, 
+      batch: String(batch) 
+    })
+    .select('_id username profilePicture hobby'); 
+
+    res.status(200).json({
+      success:true,
+      count: students.length,
+      students
+    });
+    
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
+// const faculty =  async (req,res)=>{
+//     try{
+//         const faculty = process.env.FACULTY
+//         console.log(faculty)
+//     } catch (err) {
+//         return res.status(500).json({
+//             success: false,
+//             message: "cant get the faculty"
+//         });
+//     }
+// }
 
 
 const addFriends = async (req, res) => {
@@ -272,6 +321,80 @@ const addFriends = async (req, res) => {
             success: false,
             message: "An error occurred while adding the friend"
         });
+    }
+};
+
+
+
+
+export const getUpcomingBirthdays = async (req, res) => {
+    try {
+        const users = await User.find({}, 'username profilePicture dov');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset time for accurate day calculation
+        const currentYear = today.getFullYear();
+
+        const upcomingBirthdays = users.filter(user => user.dov).map(user => {
+            const birthDate = new Date(user.dov);
+            
+            // Calculate this year's birthday
+            let nextBirthday = new Date(currentYear, birthDate.getMonth(), birthDate.getDate());
+
+            // If birthday already passed this year, move to next year
+            if (nextBirthday < today) {
+                nextBirthday.setFullYear(currentYear + 1);
+            }
+
+            // Calculate days remaining
+            const diffTime = nextBirthday - today;
+            const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            return {
+                _id: user._id,
+                username: user.username,
+                profilePicture: user.profilePicture,
+                nextAge: nextBirthday.getFullYear() - birthDate.getFullYear(),
+                date: user.dov,
+                daysRemaining: daysRemaining
+            };
+        });
+
+        // 1. Only show birthdays in the next 30 days
+        // 2. Sort by daysRemaining (0 means Today, 1 means Tomorrow, etc.)
+        const sortedBirthdays = upcomingBirthdays
+            .filter(user => user.daysRemaining <= 30)
+            .sort((a, b) => a.daysRemaining - b.daysRemaining);
+
+        return res.status(200).json({
+            success: true,
+            birthdays: sortedBirthdays
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+};
+
+
+export const searchUser = async (req, res) => {
+    try {
+        const query = req.query.query;
+        if (!query) {
+            return res.status(200).json({ success: true, users: [] });
+        }
+
+        // Find users where username matches the query (case-insensitive 'i')
+        const users = await User.find({
+            username: { $regex: query, $options: 'i' }
+        }).select("username profilePicture faculty batch");
+
+        return res.status(200).json({
+            success: true,
+            users
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Search error" });
     }
 };
 
