@@ -1,6 +1,7 @@
 # DavApp Chat System - Complete End-to-End Encryption Guide
 
 ## Table of Contents
+
 1. [System Overview](#system-overview)
 2. [How the Chat System Works](#how-the-chat-system-works)
 3. [Encryption Architecture](#encryption-architecture)
@@ -27,11 +28,11 @@ The DavApp chat system uses **RSA-AES Hybrid Encryption** to provide end-to-end 
 
 ### Why Hybrid Encryption?
 
-| Method | Pros | Cons |
-|--------|------|------|
-| **RSA Only** | Very secure | Slow, can't encrypt large messages |
-| **AES Only** | Very fast | Symmetric - both need same key |
-| **RSA-AES Hybrid** | ✅ Fast + Secure | ✅ Secure key exchange | ✅ Large messages |
+| Method             | Pros             | Cons                               |
+| ------------------ | ---------------- | ---------------------------------- | ----------------- |
+| **RSA Only**       | Very secure      | Slow, can't encrypt large messages |
+| **AES Only**       | Very fast        | Symmetric - both need same key     |
+| **RSA-AES Hybrid** | ✅ Fast + Secure | ✅ Secure key exchange             | ✅ Large messages |
 
 ---
 
@@ -195,13 +196,13 @@ If USER B goes offline:
 
 ### Encryption Specifications
 
-| Component | Specification | Details |
-|-----------|---------------|---------|
-| **RSA** | 512-bit keys | For key exchange (upgrade to 2048+ for production) |
-| **AES** | 128-bit block cipher | 10 rounds of encryption |
-| **AES Key Size** | 128 bits (16 bytes) | Randomly generated per message |
-| **Padding** | PKCS7 | Message padding to block size |
-| **Mode** | ECB | Electronic Code Book (upgrade to CBC for production) |
+| Component        | Specification        | Details                                              |
+| ---------------- | -------------------- | ---------------------------------------------------- |
+| **RSA**          | 512-bit keys         | For key exchange (upgrade to 2048+ for production)   |
+| **AES**          | 128-bit block cipher | 10 rounds of encryption                              |
+| **AES Key Size** | 128 bits (16 bytes)  | Randomly generated per message                       |
+| **Padding**      | PKCS7                | Message padding to block size                        |
+| **Mode**         | ECB                  | Electronic Code Book (upgrade to CBC for production) |
 
 ---
 
@@ -266,14 +267,14 @@ If USER B goes offline:
 
 ### Security Guarantees
 
-| Item | Guarantee | Why |
-|------|-----------|-----|
-| **Private Keys** | Never leave server | Always stored in backend memory |
-| **Public Keys** | Can be shared | Safe to distribute (asymmetric) |
-| **Messages** | Encrypted in DB | No plaintext stored |
-| **AES Keys** | Encrypted via RSA | Protects per-message encryption keys |
-| **Sender** | Can't decrypt sent messages | Uses recipient's public key |
-| **Recipient** | Can decrypt all messages | Has their private key |
+| Item             | Guarantee                   | Why                                  |
+| ---------------- | --------------------------- | ------------------------------------ |
+| **Private Keys** | Never leave server          | Always stored in backend memory      |
+| **Public Keys**  | Can be shared               | Safe to distribute (asymmetric)      |
+| **Messages**     | Encrypted in DB             | No plaintext stored                  |
+| **AES Keys**     | Encrypted via RSA           | Protects per-message encryption keys |
+| **Sender**       | Can't decrypt sent messages | Uses recipient's public key          |
+| **Recipient**    | Can decrypt all messages    | Has their private key                |
 
 ---
 
@@ -381,18 +382,19 @@ const messageSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  receiverId: {  // Changed from reciverId
+  receiverId: {
+    // Changed from reciverId
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
   message: String, // Original plaintext (for reference)
-  
+
   // Encryption fields
-  encryptedMessage: String,    // AES encrypted message (base64)
-  encryptedKey: String,        // RSA encrypted AES key
-  algorithm: String,           // "AES-128-RSA"
-  isEncrypted: Boolean,        // true if encrypted
-  
+  encryptedMessage: String, // AES encrypted message (base64)
+  encryptedKey: String, // RSA encrypted AES key
+  algorithm: String, // "AES-128-RSA"
+  isEncrypted: Boolean, // true if encrypted
+
   createdAt: { type: Date, default: Date.now },
 });
 ```
@@ -481,7 +483,11 @@ export const getMessage = async (req, res) => {
     const decryptedMessages = conversation.message.map((msg) => {
       const messageObj = msg.toObject();
 
-      if (messageObj.isEncrypted && messageObj.encryptedMessage && messageObj.encryptedKey) {
+      if (
+        messageObj.isEncrypted &&
+        messageObj.encryptedMessage &&
+        messageObj.encryptedKey
+      ) {
         try {
           // Only recipient can decrypt
           if (msg.receiverId.toString() === senderId.toString()) {
@@ -560,16 +566,16 @@ const userSocketMap = {};
 // Broadcast online users
 const broadcastOnlineUsers = () => {
   const onlineUserIds = Object.keys(userSocketMap);
-  console.log(`Broadcasting online users: [${onlineUserIds.join(', ')}]`);
+  console.log(`Broadcasting online users: [${onlineUserIds.join(", ")}]`);
   io.emit("getOnlineUser", onlineUserIds);
 };
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
-  
+
   if (userId) {
     userSocketMap[userId] = socket.id;
-    
+
     // Generate encryption keys for user
     generateUserKeyPair(userId);
     console.log(`User connected: ${userId}`);
@@ -617,8 +623,8 @@ export const fetchRecipientPublicKey = async (recipientId, axiosInstance) => {
   const response = await axios.get(
     `http://localhost:8000/api/v1/message/publicKey/${recipientId}`,
     {
-      headers: { Authorization: `Bearer ${token}` }
-    }
+      headers: { Authorization: `Bearer ${token}` },
+    },
   );
   return response.data.publicKey;
 };
@@ -661,21 +667,25 @@ export const formatMessageForDisplay = (message) => {
 **Purpose**: React hook for encrypted messaging
 
 ```javascript
-import { useEffect, useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { getOrFetchPublicKey, formatMessageForDisplay, getEncryptionStatus } from '../utils/encryptionClient';
+import { useEffect, useState, useCallback } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import {
+  getOrFetchPublicKey,
+  formatMessageForDisplay,
+  getEncryptionStatus,
+} from "../utils/encryptionClient";
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = "http://localhost:8000";
 
 export const useEncryptedMessages = (recipientId) => {
-  const { user } = useSelector(store => store.auth);
-  const { socket } = useSelector(store => store.socketio);
-  
+  const { user } = useSelector((store) => store.auth);
+  const { socket } = useSelector((store) => store.socketio);
+
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [encryptionStatus, setEncryptionStatus] = useState('idle');
+  const [encryptionStatus, setEncryptionStatus] = useState("idle");
   const [recipientPublicKey, setRecipientPublicKey] = useState(null);
 
   // Load recipient's public key
@@ -685,23 +695,23 @@ export const useEncryptedMessages = (recipientId) => {
       const publicKey = await getOrFetchPublicKey(recipientId, axios);
       setRecipientPublicKey(publicKey);
     } catch (err) {
-      console.error('Failed to load recipient public key:', err);
-      setError('Failed to setup encryption');
+      console.error("Failed to load recipient public key:", err);
+      setError("Failed to setup encryption");
     }
   }, [recipientId]);
 
   // Fetch messages
   const fetchMessages = useCallback(async () => {
     if (!recipientId || !user) return;
-    
+
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
         `${API_BASE}/api/v1/message/all/${recipientId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
-      
+
       if (response.data.success) {
         const formattedMessages = response.data.messages.map((msg) => ({
           ...msg,
@@ -711,49 +721,55 @@ export const useEncryptedMessages = (recipientId) => {
         setMessages(formattedMessages);
       }
     } catch (err) {
-      console.error('Failed to fetch messages:', err);
-      setError('Failed to fetch messages');
+      console.error("Failed to fetch messages:", err);
+      setError("Failed to fetch messages");
     } finally {
       setLoading(false);
     }
   }, [recipientId, user]);
 
   // Send encrypted message
-  const sendEncryptedMessage = useCallback(async (messageText) => {
-    if (!recipientId || !user) {
-      setError('Cannot send message: encryption not ready');
-      return false;
-    }
-
-    try {
-      setEncryptionStatus('encrypting');
-      
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        `${API_BASE}/api/v1/message/send/${recipientId}`,
-        { textMessage: messageText },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (response.data.success) {
-        const newMsg = response.data.newMessage;
-        setMessages(prev => [...prev, {
-          ...newMsg,
-          displayText: messageText, // Show plaintext on sender side
-          encryptionInfo: getEncryptionStatus(newMsg.isEncrypted),
-          isSent: true
-        }]);
-        setError(null);
-        return true;
+  const sendEncryptedMessage = useCallback(
+    async (messageText) => {
+      if (!recipientId || !user) {
+        setError("Cannot send message: encryption not ready");
+        return false;
       }
-    } catch (err) {
-      console.error('Failed to send message:', err);
-      setError('Failed to send message');
-      return false;
-    } finally {
-      setEncryptionStatus('idle');
-    }
-  }, [recipientId, user]);
+
+      try {
+        setEncryptionStatus("encrypting");
+
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+          `${API_BASE}/api/v1/message/send/${recipientId}`,
+          { textMessage: messageText },
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+
+        if (response.data.success) {
+          const newMsg = response.data.newMessage;
+          setMessages((prev) => [
+            ...prev,
+            {
+              ...newMsg,
+              displayText: messageText, // Show plaintext on sender side
+              encryptionInfo: getEncryptionStatus(newMsg.isEncrypted),
+              isSent: true,
+            },
+          ]);
+          setError(null);
+          return true;
+        }
+      } catch (err) {
+        console.error("Failed to send message:", err);
+        setError("Failed to send message");
+        return false;
+      } finally {
+        setEncryptionStatus("idle");
+      }
+    },
+    [recipientId, user],
+  );
 
   // Listen for new messages
   useEffect(() => {
@@ -763,17 +779,17 @@ export const useEncryptedMessages = (recipientId) => {
       const formattedMsg = {
         ...message,
         displayText: message.displayMessage || message.message,
-        encryptionInfo: getEncryptionStatus(message.isEncrypted)
+        encryptionInfo: getEncryptionStatus(message.isEncrypted),
       };
-      setMessages(prev => [...prev, formattedMsg]);
+      setMessages((prev) => [...prev, formattedMsg]);
     };
 
-    socket.on('newMessage', handleNewMessage);
-    socket.on('receiveEncryptedMessage', handleNewMessage);
+    socket.on("newMessage", handleNewMessage);
+    socket.on("receiveEncryptedMessage", handleNewMessage);
 
     return () => {
-      socket.off('newMessage', handleNewMessage);
-      socket.off('receiveEncryptedMessage', handleNewMessage);
+      socket.off("newMessage", handleNewMessage);
+      socket.off("receiveEncryptedMessage", handleNewMessage);
     };
   }, [socket]);
 
@@ -800,11 +816,11 @@ export const useEncryptedMessages = (recipientId) => {
 **Purpose**: Ready-to-use encrypted chat UI
 
 ```javascript
-import React, { useState } from 'react';
-import { useEncryptedMessages } from '../hooks/useEncryptedMessages';
+import React, { useState } from "react";
+import { useEncryptedMessages } from "../hooks/useEncryptedMessages";
 
 export const EncryptedChat = ({ recipientId, recipientName }) => {
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const {
     messages,
     loading,
@@ -822,7 +838,7 @@ export const EncryptedChat = ({ recipientId, recipientName }) => {
     setSending(true);
     const success = await sendEncryptedMessage(inputMessage);
     if (success) {
-      setInputMessage('');
+      setInputMessage("");
     }
     setSending(false);
   };
@@ -854,7 +870,7 @@ export const EncryptedChat = ({ recipientId, recipientName }) => {
               <div className="flex-1">
                 <p className="text-gray-800">{msg.displayText}</p>
                 <p className="text-xs text-gray-400">
-                  {msg.isEncrypted ? '[Encrypted]' : '[Unencrypted]'}
+                  {msg.isEncrypted ? "[Encrypted]" : "[Unencrypted]"}
                 </p>
               </div>
             </div>
@@ -870,7 +886,7 @@ export const EncryptedChat = ({ recipientId, recipientName }) => {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Type a message..."
-            disabled={sending || encryptionStatus === 'encrypting'}
+            disabled={sending || encryptionStatus === "encrypting"}
             className="flex-1 px-4 py-2 border rounded-lg focus:outline-none"
           />
           <button
@@ -878,7 +894,7 @@ export const EncryptedChat = ({ recipientId, recipientName }) => {
             disabled={!inputMessage.trim() || sending}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            {sending ? 'Sending...' : 'Send'}
+            {sending ? "Sending..." : "Send"}
           </button>
         </form>
       </div>
@@ -1075,22 +1091,25 @@ import { useEncryptedMessages } from "../hooks/useEncryptedMessages";
 
 function YourExistingChatPage() {
   const [recipientId, setRecipientId] = useState(null);
-  const { messages, sendEncryptedMessage, error } = useEncryptedMessages(recipientId);
+  const { messages, sendEncryptedMessage, error } =
+    useEncryptedMessages(recipientId);
 
   return (
     <div>
       {/* Your existing UI */}
-      {messages.map(msg => (
+      {messages.map((msg) => (
         <div key={msg._id}>
           <p>{msg.displayText}</p>
           {msg.isEncrypted && <span>[Encrypted]</span>}
         </div>
       ))}
-      
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        sendEncryptedMessage(messageText);
-      }}>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendEncryptedMessage(messageText);
+        }}
+      >
         <input type="text" placeholder="Type message..." />
         <button>Send Encrypted</button>
       </form>
@@ -1225,6 +1244,7 @@ VULNERABLE TO:
 **Cause**: Recipient's private key not found or decryption failed
 
 **Solution**:
+
 ```bash
 1. Check backend logs for "No encryption keys found"
 2. Verify user is connected to Socket.IO
@@ -1237,6 +1257,7 @@ VULNERABLE TO:
 **Cause**: Backend not sending displayMessage field
 
 **Solution**:
+
 ```bash
 1. Verify backend has latest message.controller.js
 2. Check API response includes displayMessage
@@ -1249,6 +1270,7 @@ VULNERABLE TO:
 **Cause**: User not connected or endpoint not working
 
 **Solution**:
+
 ```bash
 1. Verify GET /api/v1/message/publicKey/:id endpoint exists
 2. Check user is connected (should have socket)
@@ -1261,6 +1283,7 @@ VULNERABLE TO:
 **Cause**: Database save failing or MongoDB connection issue
 
 **Solution**:
+
 ```bash
 1. Check MongoDB is running
 2. Verify message.model.js has all fields
@@ -1274,6 +1297,7 @@ VULNERABLE TO:
 **Cause**: Socket.IO events not broadcasting properly
 
 **Solution**:
+
 ```bash
 1. Check backend socket.js has broadcastOnlineUsers()
 2. Verify "getOnlineUser" event listener in App.jsx
@@ -1287,11 +1311,13 @@ VULNERABLE TO:
 **Cause**: Normal, but can be optimized
 
 **Current Speed**:
+
 - AES encryption: ~50ms
 - RSA encryption: ~100ms
 - Total: ~300ms
 
 **Optimization**:
+
 ```javascript
 // Cache public keys
 const publicKeyCache = {};
