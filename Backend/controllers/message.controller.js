@@ -51,7 +51,7 @@ export const sendMessage = async (req, res) => {
       id: newMessage._id,
       isEncrypted: newMessage.isEncrypted,
       hasEncryptedMessage: !!newMessage.encryptedMessage,
-      hasEncryptedKey: !!newMessage.encryptedKey
+      hasEncryptedKey: !!newMessage.encryptedKey,
     });
 
     if (newMessage) conversation.message.push(newMessage._id);
@@ -104,7 +104,11 @@ export const getMessage = async (req, res) => {
     const decryptedMessages = conversation.message.map((msg) => {
       const messageObj = msg.toObject();
 
-      if (messageObj.isEncrypted && messageObj.encryptedMessage && messageObj.encryptedKey) {
+      if (
+        messageObj.isEncrypted &&
+        messageObj.encryptedMessage &&
+        messageObj.encryptedKey
+      ) {
         try {
           // User can only decrypt messages sent TO them
           if (msg.receiverId.toString() === senderId.toString()) {

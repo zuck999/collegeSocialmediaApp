@@ -20,14 +20,16 @@ export const getReciverSocketId = (reciverId) => userSocketMap[reciverId];
 // Function to broadcast online users to all connected clients
 const broadcastOnlineUsers = () => {
   const onlineUserIds = Object.keys(userSocketMap);
-  console.log(`Broadcasting online users to all clients: [${onlineUserIds.join(', ')}]`);
+  console.log(
+    `Broadcasting online users to all clients: [${onlineUserIds.join(", ")}]`,
+  );
   io.emit("getOnlineUser", onlineUserIds);
 };
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
   console.log(`Socket connection attempt, userId: ${userId}`);
-  
+
   if (userId) {
     userSocketMap[userId] = socket.id;
     // Generate encryption keys for the user on connection
