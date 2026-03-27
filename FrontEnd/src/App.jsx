@@ -79,18 +79,27 @@ function App() {
       });
       dispatch(setSocket(socketio));
       
-      //listning all event       baki----
+      //listening to all events       
+      console.log("Setting up socket listeners...");
       
-      console.log("---------------------online user<><><>")//printing
-      socketio.on('getOnlineUser',(onlineUser)=>{
-      console.log("---------------------online user<>--<>")//not printing why
-        dispatch(setOnlineUsers(onlineUser));
+      socketio.on('getOnlineUser', (onlineUsers) => {
+        console.log("Online users received:", onlineUsers);
+        dispatch(setOnlineUsers(onlineUsers));
       });
 
       //notification
       socketio.on("notification",(notification)=>{
         dispatch(setLikeNotification(notification));
-      })
+      });
+
+      // Handle connection events
+      socketio.on('connect', () => {
+        console.log('Socket connected successfully:', socketio.id);
+      });
+
+      socketio.on('disconnect', () => {
+        console.log('Socket disconnected');
+      });
 
       return ()=>{//cleanUp   
         socketio.close();
