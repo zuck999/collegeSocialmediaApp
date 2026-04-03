@@ -17,7 +17,6 @@ const io = new Server(server, {
 const userSocketMap = {}; // userId --> socketId
 export const getReciverSocketId = (reciverId) => userSocketMap[reciverId];
 
-// Function to broadcast online users to all connected clients
 const broadcastOnlineUsers = () => {
   const onlineUserIds = Object.keys(userSocketMap);
   console.log(
@@ -32,17 +31,18 @@ io.on("connection", (socket) => {
 
   if (userId && userId !== "undefined") {
     userSocketMap[userId] = socket.id;
-    // Generate encryption keys for the user on connection
+    // Gen encryption keys for the user on connection
     generateUserKeyPair(userId);
     console.log(`User connected: UserId = ${userId} , Socket = ${socket.id}`);
     console.log(`Encryption keys generated for user: ${userId}`);
     console.log(`Current online users:`, Object.keys(userSocketMap));
+
+    // Broadcast online users to ALL clients AFTER adding user to map
+    broadcastOnlineUsers();
+  } else {
+    console.log("Invalid userId, not adding to online users map");
   }
 
-  // Broadcast online users to ALL clients
-  broadcastOnlineUsers();
-
-  // Handle encrypted message transmission
   socket.on("sendEncryptedMessage", (data) => {
     const { recipientId, encryptedMessage, encryptedKey } = data;
     const recipientSocketId = getReciverSocketId(recipientId);
@@ -64,10 +64,15 @@ io.on("connection", (socket) => {
       );
       if (userSocketMap[userId] === socket.id) {
         delete userSocketMap[userId];
+        console.log(`Removed user from online map: ${userId}`);
+        console.log(
+          `Current online users after disconnect:`,
+          Object.keys(userSocketMap),
+        );
       }
+      // Broadcast online users AFTER removing user from map
+      broadcastOnlineUsers();
     }
-    // Broadcast updated online users after disconnect
-    broadcastOnlineUsers();
   });
 });
 

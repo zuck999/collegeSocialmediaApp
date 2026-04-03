@@ -22,7 +22,11 @@ import CollegeSocialUI from "./practice";
 const brousingRouter = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute><Mainlayout /></ProtectedRoute>,
+    element: (
+      <ProtectedRoute>
+        <Mainlayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: "/",
@@ -86,27 +90,34 @@ function App() {
       //listening to all events
       console.log("Setting up socket listeners...");
 
-      socketio.on("getOnlineUser", (onlineUsers) => {
+      const handleOnlineUsers = (onlineUsers) => {
         console.log("Online users received:", onlineUsers);
         dispatch(setOnlineUsers(onlineUsers));
-      });
+      };
 
-      //notification
-      socketio.on("notification", (notification) => {
+      const handleNotification = (notification) => {
         dispatch(setLikeNotification(notification));
-      });
+      };
 
-      // Handle connection events
-      socketio.on("connect", () => {
+      const handleConnect = () => {
         console.log("Socket connected successfully:", socketio.id);
-      });
+      };
 
-      socketio.on("disconnect", () => {
+      const handleDisconnect = () => {
         console.log("Socket disconnected");
-      });
+      };
+
+      socketio.on("getOnlineUser", handleOnlineUsers);
+      socketio.on("notification", handleNotification);
+      socketio.on("connect", handleConnect);
+      socketio.on("disconnect", handleDisconnect);
 
       return () => {
-        //cleanUp
+        //cleanUp - remove listeners before closing
+        socketio.off("getOnlineUser", handleOnlineUsers);
+        socketio.off("notification", handleNotification);
+        socketio.off("connect", handleConnect);
+        socketio.off("disconnect", handleDisconnect);
         socketio.close();
         dispatch(setSocket(null));
       };
@@ -114,7 +125,7 @@ function App() {
       socket?.close();
       dispatch(setSocket(null));
     }
-  }, [user, dispatch]); //10:53:11
+  }, [user, dispatch]);
 
   return (
     <div>

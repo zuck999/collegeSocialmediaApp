@@ -20,6 +20,7 @@
 ## Overview
 
 DavApp has **6 main data entities** flowing through the system:
+
 1. **User Data** - Profiles, authentication
 2. **Post Data** - Images, captions, likes, comments
 3. **Message Data** - Encrypted messages, conversations
@@ -755,6 +756,7 @@ DATA STORED: Event collection (attendees array)
 ## Data Stores
 
 ### D1: User Collection
+
 ```javascript
 {
   _id: ObjectId,
@@ -783,6 +785,7 @@ OPERATIONS:
 ```
 
 ### D2: Post Collection
+
 ```javascript
 {
   _id: ObjectId,
@@ -803,19 +806,20 @@ OPERATIONS:
 ```
 
 ### D3: Message Collection (Encrypted)
+
 ```javascript
 {
   _id: ObjectId,
   senderId: ObjectId,         // Ref to User (sender)
   receiverId: ObjectId,       // Ref to User (receiver)
   message: String,            // Original plaintext (reference)
-  
+
   // Encryption fields
   encryptedMessage: String,   // AES-128 encrypted (base64)
   encryptedKey: String,       // RSA-512 encrypted AES key
   algorithm: String,          // "AES-128-RSA"
   isEncrypted: Boolean,       // true if encrypted
-  
+
   createdAt: Date,
   updatedAt: Date
 }
@@ -828,6 +832,7 @@ OPERATIONS:
 ```
 
 ### D4: Comment Collection
+
 ```javascript
 {
   _id: ObjectId,
@@ -846,6 +851,7 @@ OPERATIONS:
 ```
 
 ### D5: Conversation Collection
+
 ```javascript
 {
   _id: ObjectId,
@@ -863,6 +869,7 @@ OPERATIONS:
 ```
 
 ### D6: Event Collection
+
 ```javascript
 {
   _id: ObjectId,
@@ -886,6 +893,7 @@ OPERATIONS:
 ```
 
 ### D7: RSA Key Storage (Backend Memory)
+
 ```javascript
 // Stored in backend memory (NOT in database)
 userKeyPairs = Map {
@@ -1261,10 +1269,10 @@ Receive Plaintext: "Hello Bob"
      │ 8. Decrypt for Display (Backend has keys)
      │    Get userId_B's Private Key
      │    privateKey_B = getUserPrivateKey(userId_B)
-     │    
+     │
      │    Decrypt AES Key:
      │    aesKey = RSA.decrypt(encryptedKey, privateKey_B)
-     │    
+     │
      │    Decrypt Message:
      │    plaintext = AES.decrypt(encryptedMsg, aesKey)
      │    → "Hello Bob"
@@ -1416,15 +1424,15 @@ Asynchronous (Real-time):
 
 ### Data Transfer Rates
 
-| Operation | Size | Time |
-|-----------|------|------|
-| Login | ~2 KB | 200ms |
-| Register | ~2 KB | 300ms |
-| Create Post | 1-5 MB (image) | 1-2s |
-| Fetch Feed | ~50 KB (10 posts) | 500ms |
-| Send Message | 1-5 KB | 300ms |
-| Add Comment | ~1 KB | 200ms |
-| RSVP Event | ~1 KB | 150ms |
+| Operation    | Size              | Time  |
+| ------------ | ----------------- | ----- |
+| Login        | ~2 KB             | 200ms |
+| Register     | ~2 KB             | 300ms |
+| Create Post  | 1-5 MB (image)    | 1-2s  |
+| Fetch Feed   | ~50 KB (10 posts) | 500ms |
+| Send Message | 1-5 KB            | 300ms |
+| Add Comment  | ~1 KB             | 200ms |
+| RSVP Event   | ~1 KB             | 150ms |
 
 ### Database Query Optimization
 
@@ -1434,26 +1442,26 @@ Asynchronous (Real-time):
 // Feed (with populated references)
 db.posts
   .find()
-  .populate('author', 'username profilePicture')
-  .populate('comments')
-  .sort({createdAt: -1})
-  .limit(10)
+  .populate("author", "username profilePicture")
+  .populate("comments")
+  .sort({ createdAt: -1 })
+  .limit(10);
 
 // User Profile
 db.users
   .findById(userId)
-  .populate('post')
-  .populate('friends', 'username profilePicture')
+  .populate("post")
+  .populate("friends", "username profilePicture");
 
 // Messages (with conversation)
 db.messages
   .find({
     $or: [
-      {senderId: userId, receiverId: otherId},
-      {senderId: otherId, receiverId: userId}
-    ]
+      { senderId: userId, receiverId: otherId },
+      { senderId: otherId, receiverId: userId },
+    ],
   })
-  .sort({createdAt: -1})
+  .sort({ createdAt: -1 });
 ```
 
 ---

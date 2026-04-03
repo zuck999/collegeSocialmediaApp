@@ -1069,7 +1069,7 @@ USER ACTION                           FRONTEND                          BACKEND
                │ Generate AES key     └────────────┘  ├─ userId_A → {pub, priv}
                │ Encrypt msg with AES                ├─ userId_B → {pub, priv}
                │ Encrypt AES with RSA                └─ userId_C → {pub, priv}
-               │                      
+               │
                │  POST /send/:id      ┌────────────┐
                │  (plaintext message) │ Encryption │  messageController
                │  ─────────────────→  │ Service    │  .sendMessage()
@@ -1079,11 +1079,11 @@ USER ACTION                           FRONTEND                          BACKEND
                │                      │            │  ├─ AES encrypt msg
                │                      │ Socket.IO  │  ├─ RSA encrypt AES key
                │                      │ Emit       │  └─ Decrypt for display
-               │                      │            │  
+               │                      │            │
                │  ← Message sent      │            │  ↓
                │ Add to chat          │            │  MongoDB Messages
                │                      │            │  Store encrypted
-               │ Socket.IO Listener   └────────────┘  
+               │ Socket.IO Listener   └────────────┘
                │ "newMessage"         Socket.IO Emit
                │ Display message      "newMessage"
                │ [Encrypted indicator]  ↓
