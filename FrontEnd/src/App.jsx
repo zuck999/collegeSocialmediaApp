@@ -8,6 +8,7 @@ import EditProfile from "./components/EditProfile";
 import EditUser from "./components/EditUser";
 import ReduxTest from "./components/reduxTest";
 import ChatPage from "./components/ChatPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import { io } from "socket.io-client";
 import { useEffect } from "react";
@@ -21,7 +22,7 @@ import CollegeSocialUI from "./practice";
 const brousingRouter = createBrowserRouter([
   {
     path: "/",
-    element: <Mainlayout />,
+    element: <ProtectedRoute><Mainlayout /></ProtectedRoute>,
     children: [
       {
         path: "/",

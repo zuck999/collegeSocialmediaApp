@@ -391,7 +391,7 @@ Message
 ✓ Online User Status  
 ✓ Birthday Reminders  
 ✓ Event Management  
-✓ Real-time Notifications  
+
 ✓ Image Upload (Cloudinary)
 
 ---

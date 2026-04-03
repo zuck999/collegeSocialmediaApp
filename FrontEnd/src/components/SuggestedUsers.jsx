@@ -46,7 +46,7 @@ function SuggestedUsers() {
                   </div>
                 </div>
               </div>
-              <span className="  text-xs text-sky-700  cursor-pointer hover:text-stone-400 ml-1  px-1 py-0 ">+Add Friend </span>
+              <span className="  text-xs text-sky-700  cursor-pointer hover:text-stone-400 ml-1  px-1 py-0 ">{user?.batch} </span>
             </div>
           );
         })

@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
   console.log(`Socket connection attempt, userId: ${userId}`);
 
-  if (userId) {
+  if (userId && userId !== "undefined") {
     userSocketMap[userId] = socket.id;
     // Generate encryption keys for the user on connection
     generateUserKeyPair(userId);
@@ -58,11 +58,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    if (userId) {
+    if (userId && userId !== "undefined") {
       console.log(
         `User disconnected: UserId = ${userId} , Socket = ${socket.id}`,
       );
-      delete userSocketMap[userId];
+      if (userSocketMap[userId] === socket.id) {
+        delete userSocketMap[userId];
+      }
     }
     // Broadcast updated online users after disconnect
     broadcastOnlineUsers();

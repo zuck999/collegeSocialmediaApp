@@ -26,6 +26,7 @@
 ## Overview
 
 **DavApp** is a social networking platform designed specifically for college students. It enables users to:
+
 - Create and share posts with images
 - Connect with other students through messaging
 - Discover and attend campus events
@@ -48,6 +49,7 @@
 ### Core Features
 
 #### 1. **User Management**
+
 - ✅ Register with email and password
 - ✅ Login with JWT authentication
 - ✅ Update profile (picture, bio, details)
@@ -56,6 +58,7 @@
 - ✅ Track user information (batch, faculty, hobby, etc.)
 
 #### 2. **Posts & Interactions**
+
 - ✅ Create posts with image upload
 - ✅ Like/unlike posts
 - ✅ Comment on posts
@@ -65,6 +68,7 @@
 - ✅ See who liked your posts
 
 #### 3. **Real-time Messaging**
+
 - ✅ Send encrypted messages to other users
 - ✅ View message history
 - ✅ Real-time message delivery via Socket.IO
@@ -73,6 +77,7 @@
 - ✅ Message persistence in database
 
 #### 4. **Campus Events**
+
 - ✅ Browse upcoming events
 - ✅ View event details (title, description, date, time, location)
 - ✅ Filter events by category (Academic, Sports, Seminar, Workshop)
@@ -80,12 +85,14 @@
 - ✅ Create/edit/delete events (admin)
 
 #### 5. **Birthday Tracking**
+
 - ✅ View upcoming birthdays
 - ✅ See who's birthday it is today
 - ✅ Send birthday wishes
 - ✅ Birthday notifications
 
 #### 6. **Security & Encryption**
+
 - ✅ JWT authentication for API endpoints
 - ✅ Password hashing with bcryptjs
 - ✅ End-to-end message encryption (AES-128 + RSA-512)
@@ -98,40 +105,40 @@
 
 ### Backend
 
-| Technology | Purpose | Version |
-|------------|---------|---------|
-| **Node.js** | Runtime | Latest |
-| **Express.js** | Web Framework | 4.x |
-| **MongoDB** | Database | 5.x+ |
-| **Mongoose** | ODM | Latest |
-| **Socket.IO** | Real-time Communication | 4.x |
-| **JWT** | Authentication | jsonwebtoken |
-| **bcryptjs** | Password Hashing | Latest |
-| **Multer** | File Upload | Latest |
-| **Cloudinary** | Image Storage | Latest |
-| **CORS** | Cross-Origin | Latest |
-| **Dotenv** | Environment Variables | Latest |
+| Technology     | Purpose                 | Version      |
+| -------------- | ----------------------- | ------------ |
+| **Node.js**    | Runtime                 | Latest       |
+| **Express.js** | Web Framework           | 4.x          |
+| **MongoDB**    | Database                | 5.x+         |
+| **Mongoose**   | ODM                     | Latest       |
+| **Socket.IO**  | Real-time Communication | 4.x          |
+| **JWT**        | Authentication          | jsonwebtoken |
+| **bcryptjs**   | Password Hashing        | Latest       |
+| **Multer**     | File Upload             | Latest       |
+| **Cloudinary** | Image Storage           | Latest       |
+| **CORS**       | Cross-Origin            | Latest       |
+| **Dotenv**     | Environment Variables   | Latest       |
 
 ### Frontend
 
-| Technology | Purpose | Version |
-|------------|---------|---------|
-| **React** | UI Library | 18.x |
-| **Vite** | Build Tool | 5.x |
-| **Redux Toolkit** | State Management | 1.x |
-| **Axios** | HTTP Client | Latest |
-| **Socket.IO Client** | Real-time Communication | 4.x |
-| **Tailwind CSS** | Styling | 3.x |
-| **ShadCN UI** | Component Library | Latest |
+| Technology           | Purpose                 | Version |
+| -------------------- | ----------------------- | ------- |
+| **React**            | UI Library              | 18.x    |
+| **Vite**             | Build Tool              | 5.x     |
+| **Redux Toolkit**    | State Management        | 1.x     |
+| **Axios**            | HTTP Client             | Latest  |
+| **Socket.IO Client** | Real-time Communication | 4.x     |
+| **Tailwind CSS**     | Styling                 | 3.x     |
+| **ShadCN UI**        | Component Library       | Latest  |
 
 ### Development Tools
 
-| Tool | Purpose |
-|------|---------|
+| Tool        | Purpose             |
+| ----------- | ------------------- |
 | **Nodemon** | Auto-reload Backend |
-| **ESLint** | Code Linting |
-| **PostCSS** | CSS Processing |
-| **Git** | Version Control |
+| **ESLint**  | Code Linting        |
+| **PostCSS** | CSS Processing      |
+| **Git**     | Version Control     |
 
 ---
 
@@ -331,13 +338,13 @@ DavApp/
   senderId: ObjectId (ref: User),
   receiverId: ObjectId (ref: User),
   message: String (original plaintext),
-  
+
   // Encryption fields
   encryptedMessage: String (AES encrypted),
   encryptedKey: String (RSA encrypted AES key),
   algorithm: String ("AES-128-RSA"),
   isEncrypted: Boolean,
-  
+
   createdAt: Date,
   updatedAt: Date
 }
@@ -456,6 +463,7 @@ npm run dev
 ```
 
 **Expected Output**:
+
 ```
 Server running on http://localhost:8000
 MongoDB connected successfully
@@ -469,6 +477,7 @@ npm run dev
 ```
 
 **Expected Output**:
+
 ```
 VITE v5.x.x  ready in xxx ms
 
@@ -478,6 +487,7 @@ VITE v5.x.x  ready in xxx ms
 ### Access the Application
 
 Open browser and navigate to:
+
 ```
 http://localhost:5173
 ```
@@ -659,6 +669,7 @@ Display "Hello" with [Encrypted] indicator
 ### 1. Posts & Feed System
 
 **Creating a Post**:
+
 1. User clicks "Create Post"
 2. Uploads image and adds caption
 3. Image sent to Cloudinary
@@ -666,12 +677,14 @@ Display "Hello" with [Encrypted] indicator
 5. Post appears in feed instantly
 
 **Liking a Post**:
+
 1. User clicks like button
 2. Frontend sends `PUT /api/v1/post/:id/like`
 3. Backend toggles like status
 4. Like count updated in UI
 
 **Commenting**:
+
 1. User types comment
 2. Comment submitted
 3. Backend creates Comment document
@@ -681,6 +694,7 @@ Display "Hello" with [Encrypted] indicator
 ### 2. Real-time Messaging
 
 **Key Points**:
+
 - Uses Socket.IO for instant delivery
 - Messages encrypted before sending
 - Backend never sees plaintext
@@ -688,6 +702,7 @@ Display "Hello" with [Encrypted] indicator
 - Message history persists
 
 **Flow**:
+
 1. User A opens chat with User B
 2. Fetches all previous messages (decrypted)
 3. Sends new message (encrypted)
@@ -698,17 +713,20 @@ Display "Hello" with [Encrypted] indicator
 ### 3. Encryption System
 
 **What's Encrypted**:
+
 - ✅ Each message individually
 - ✅ AES key per message (random generation)
 - ✅ Private keys secured on backend
 
 **What's Not Encrypted**:
+
 - ❌ User profiles
 - ❌ Posts
 - ❌ Event information
 - ❌ Metadata (timestamps, sender/receiver IDs)
 
 **Security Guarantee**:
+
 - Only recipient can decrypt
 - Backend can't read encrypted messages
 - Sender can't decrypt sent messages (uses recipient's key)
@@ -716,12 +734,14 @@ Display "Hello" with [Encrypted] indicator
 ### 4. Event Management
 
 **Event Types**:
+
 - Academic seminars
 - Sports events
 - Workshops
 - Networking events
 
 **Features**:
+
 - View upcoming events
 - RSVP and track attendance
 - Filter by category
@@ -731,6 +751,7 @@ Display "Hello" with [Encrypted] indicator
 ### 5. Birthday Tracking
 
 **Features**:
+
 - View birthdays in sidebar
 - Get notifications on birthday
 - Send birthday wishes
@@ -742,27 +763,27 @@ Display "Hello" with [Encrypted] indicator
 
 ### Backend Key Files
 
-| File | Purpose | Key Functions |
-|------|---------|----------------|
-| **index.js** | Server initialization | Express app setup, Socket.IO, routes |
-| **utils/encryption.js** | Encryption logic | generateUserKeyPair, encryptMessage, decryptMessage |
-| **utils/db.js** | Database connection | MongoDB connection setup |
-| **utils/cloudanary.js** | Image upload | Upload to Cloudinary |
-| **middleware/isAuthenticated.js** | JWT verification | Request authentication |
-| **socket/socket.js** | Real-time events | Socket.IO connection, key generation |
-| **controllers/message.controller.js** | Message logic | sendMessage, getMessage (with encryption) |
-| **models/message.model.js** | Message schema | Database structure with encryption fields |
+| File                                  | Purpose               | Key Functions                                       |
+| ------------------------------------- | --------------------- | --------------------------------------------------- |
+| **index.js**                          | Server initialization | Express app setup, Socket.IO, routes                |
+| **utils/encryption.js**               | Encryption logic      | generateUserKeyPair, encryptMessage, decryptMessage |
+| **utils/db.js**                       | Database connection   | MongoDB connection setup                            |
+| **utils/cloudanary.js**               | Image upload          | Upload to Cloudinary                                |
+| **middleware/isAuthenticated.js**     | JWT verification      | Request authentication                              |
+| **socket/socket.js**                  | Real-time events      | Socket.IO connection, key generation                |
+| **controllers/message.controller.js** | Message logic         | sendMessage, getMessage (with encryption)           |
+| **models/message.model.js**           | Message schema        | Database structure with encryption fields           |
 
 ### Frontend Key Files
 
-| File | Purpose | Key Functions |
-|------|---------|----------------|
-| **App.jsx** | Main component | Route setup, Socket.IO listener |
-| **redux/store.js** | State management | Redux configuration |
-| **hooks/useEncryptedMessages.jsx** | Encryption hook | Message sending/receiving |
-| **components/ChatPage.jsx** | Chat UI | Message display, sending |
-| **components/EncryptedChat.jsx** | Encrypted chat component | Encrypted messaging UI |
-| **utils/encryptionClient.js** | Client encryption | Public key fetching, encryption utilities |
+| File                               | Purpose                  | Key Functions                             |
+| ---------------------------------- | ------------------------ | ----------------------------------------- |
+| **App.jsx**                        | Main component           | Route setup, Socket.IO listener           |
+| **redux/store.js**                 | State management         | Redux configuration                       |
+| **hooks/useEncryptedMessages.jsx** | Encryption hook          | Message sending/receiving                 |
+| **components/ChatPage.jsx**        | Chat UI                  | Message display, sending                  |
+| **components/EncryptedChat.jsx**   | Encrypted chat component | Encrypted messaging UI                    |
+| **utils/encryptionClient.js**      | Client encryption        | Public key fetching, encryption utilities |
 
 ---
 
@@ -771,20 +792,24 @@ Display "Hello" with [Encrypted] indicator
 ### Implemented Security
 
 ✅ **Authentication**
+
 - JWT tokens
 - Password hashing (bcryptjs)
 - Protected routes
 
 ✅ **Encryption**
+
 - RSA-512 key pairs (demo - upgrade to 2048+ for production)
 - AES-128 message encryption
 - Hybrid approach for security + speed
 
 ✅ **Authorization**
+
 - Role-based access control
 - Own resource modification
 
 ✅ **Data Protection**
+
 - CORS enabled
 - Environment variables for secrets
 - Cloudinary for secure image storage
@@ -816,6 +841,7 @@ Display "Hello" with [Encrypted] indicator
 ### Backend Deployment (Heroku/Railway/Vercel)
 
 1. **Create `.env.production`**:
+
 ```env
 MONGO_URI=<atlas-connection-string>
 JWT_SECRET=<strong-random-secret>
@@ -826,12 +852,14 @@ FRONTEND_URL=<production-frontend-url>
 ```
 
 2. **Deploy to Heroku**:
+
 ```bash
 heroku create davapp-backend
 git push heroku main
 ```
 
 3. **Deploy to Railway**:
+
 ```bash
 railway link
 railway up
@@ -840,18 +868,21 @@ railway up
 ### Frontend Deployment (Vercel/Netlify)
 
 1. **Build for production**:
+
 ```bash
 cd FrontEnd
 npm run build
 ```
 
 2. **Deploy to Vercel**:
+
 ```bash
 npm i -g vercel
 vercel
 ```
 
 3. **Deploy to Netlify**:
+
 ```bash
 npm run build
 # Drag build/ folder to netlify.com
@@ -875,6 +906,7 @@ VITE_API_BASE_URL=https://davapp-backend.herokuapp.com
 #### Issue: MongoDB Connection Failed
 
 **Solution**:
+
 ```bash
 # Check MongoDB is running
 mongod
@@ -886,6 +918,7 @@ MONGO_URI=mongodb://localhost:27017/davapp
 #### Issue: "Cannot find module" Error
 
 **Solution**:
+
 ```bash
 # Reinstall dependencies
 cd Backend
@@ -901,18 +934,22 @@ npm install
 #### Issue: CORS Error
 
 **Solution**:
+
 ```javascript
 // Backend/index.js
-const cors = require('cors');
-app.use(cors({
-  origin: 'http://localhost:5173', // Frontend URL
-  credentials: true
-}));
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Frontend URL
+    credentials: true,
+  }),
+);
 ```
 
 #### Issue: Messages Not Encrypting
 
 **Solution**:
+
 ```bash
 1. Check RsaAesAlgo.js is in root
 2. Verify encryption.js imports correctly
@@ -923,22 +960,24 @@ app.use(cors({
 #### Issue: Socket.IO Not Connecting
 
 **Solution**:
+
 ```javascript
 // Frontend - check socket connection
-const socket = io('http://localhost:8000', {
+const socket = io("http://localhost:8000", {
   query: { userId: user?._id },
-  transports: ['websocket']
+  transports: ["websocket"],
 });
 
 // Backend - check socket listening
-io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
 });
 ```
 
 #### Issue: Images Not Uploading
 
 **Solution**:
+
 ```bash
 1. Verify Cloudinary credentials in .env
 2. Check multer configuration
@@ -950,15 +989,15 @@ io.on('connection', (socket) => {
 
 ## Project Statistics
 
-| Metric | Value |
-|--------|-------|
-| **Backend Files** | 5 controllers + 6 models + 3 utils |
-| **Frontend Components** | 25+ components |
-| **API Endpoints** | 25+ endpoints |
-| **Database Collections** | 6 collections |
-| **Real-time Features** | Socket.IO messaging, online status |
-| **Encryption** | RSA-AES hybrid (per-message) |
-| **Authentication** | JWT + bcryptjs |
+| Metric                   | Value                              |
+| ------------------------ | ---------------------------------- |
+| **Backend Files**        | 5 controllers + 6 models + 3 utils |
+| **Frontend Components**  | 25+ components                     |
+| **API Endpoints**        | 25+ endpoints                      |
+| **Database Collections** | 6 collections                      |
+| **Real-time Features**   | Socket.IO messaging, online status |
+| **Encryption**           | RSA-AES hybrid (per-message)       |
+| **Authentication**       | JWT + bcryptjs                     |
 
 ---
 
@@ -1036,6 +1075,7 @@ This project is licensed under the MIT License - see LICENSE file for details.
 ## Changelog
 
 ### Version 1.0.0 (Current)
+
 - ✅ User authentication & profiles
 - ✅ Posts with likes & comments
 - ✅ End-to-end encrypted messaging
@@ -1045,6 +1085,7 @@ This project is licensed under the MIT License - see LICENSE file for details.
 - ✅ Friend suggestions
 
 ### Planned Features
+
 - [ ] Video calling (WebRTC)
 - [ ] File sharing
 - [ ] Group chats
@@ -1068,4 +1109,4 @@ For project structure details, see [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
 
 ---
 
-*Last Updated: March 27, 2026*
+_Last Updated: March 27, 2026_
