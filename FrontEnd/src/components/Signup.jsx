@@ -60,7 +60,7 @@ function Signup() {
         <div className='flex items-center w-screen h-screen justify-center'>
             <form onSubmit={signupHandler} className='shadow-xl shadow-rose-100 flex flex-col gap-5 p-8 rounded-lg'>
                 <div>
-                    <h1 className='text-center font-bold'>LOGO</h1>
+                    <h1 className='text-center font-bold'>Sing up</h1>
                     <p className='text-center px-14'>login to see friends</p>
                 </div>
 

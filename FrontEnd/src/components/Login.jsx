@@ -63,7 +63,7 @@ function Login() {
     <form onSubmit={logoutHandler} className='shadow-xl shadow-rose-100 flex flex-col gap-5 p-8 rounded-lg'>
 
         <div>
-            <h1 className='text-center font-bold'>LOGO</h1>
+            <h1 className='text-center font-bold'>Login</h1>
             <p className='text-center px-14'>login to see friends</p>
         </div>
 
